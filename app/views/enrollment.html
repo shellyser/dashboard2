@@ -1,0 +1,68 @@
+  <div id="enrollment">
+    <div class="header">
+      <h1>Enrollment / Program Management</h1>
+    </div>    
+    <div class="global-filter">
+    <div class="calendar"><span class="fa fa-file show-hide-btn export-data" title="Export data as CSV" trigger trigger-target="export-data-modal" id="export-data-btn"></span><span class="show-hide-btn trigger fa fa-cog hide-large" trigger trigger-target="main-utils" trigger-closed-class="fa-cog" trigger-open-class="fa-cog" title="Settings"></span><span id="date-range-trigger" class="display-option-date" trigger trigger-target="date-options">
+      <span class="date-range">6/1/14 - 8/1/14</span><span class="show-hide-btn fa fa-calendar" title="Date Range"></span>
+      </span></div>
+      <div class="main-utils drawer closed" id="main-utils">
+        <div class="main-utils-options-wrap">
+            <select class="main-utils-options" view-type>
+                <option ng-repeat="view in enrollmentdata.GlobalViewTypes" ng-selected="view.toLowerCase() === viewParameters.view.toLowerCase()" value="{{ view | capitalize }}">{{ view | capitalize }} view</option>
+            </select>
+            <select class="main-utils-options" metric>
+                <option ng-repeat="product in enrollmentdata.Products" ng-selected="product.toLowerCase() === viewParameters.unit.toLowerCase()" value="{{ product }}">By {{ product | capitalize }}</option>
+            </select>
+        </div><ul ng-show="enrollmentdata.CommunicationTypes.length > 1"  class="main-utils-gateways">
+            <li ng-repeat="commType in enrollmentdata.CommunicationTypes" ng-class="{ active: (viewParameters.communication).indexOf(enrollmentdata.CommunicationTypeSlugs[$index]) > -1 }" communication-type communication-type-name={{enrollmentdata.CommunicationTypeSlugs[$index]}}>
+                <span class="gateway">{{ commType | capitalize }}</span>
+            </li>
+        </ul>
+    </div>
+    <div id="date-options" class="date-options-drawer drawer closed">
+      <div class="date-options-section" id="date-range-wrap">
+        <div id="date-range-content" data-min-date="" date-max-date="" class="daterangepicker dropdown-menu">
+          <div class="ranges">
+            <div class="range_inputs">
+              <div class="daterangepicker_start_input">
+                <label for="daterangepicker_start"></label>
+                <input date-range-input ng-model="dateStart" class="input-mini" type="text" name="daterangepicker_start" id="start-date-input" />
+                <div class="date-range-error" id="date-start-error">
+                  <span class="fa fa-exclamation"></span><span class="error-text"><strong>Error:</strong> start date must be 1/1/2013 or later.</span>
+                </div>
+              </div>
+              <div class="daterangepicker_end_input">
+                <label for="daterangepicker_end"></label>
+                <input date-range-input ng-model="dateEnd" class="input-mini" type="text" name="daterangepicker_end" value="" id="end-date-input">
+                <div class="date-range-error" id="date-end-error">
+                  <span class="fa fa-exclamation"></span><span class="error-text"><strong>Error:</strong> end date must be yesterday or earlier.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="calendar right"></div>
+          <div class="calendar left"></div>
+          <div class="ranges">
+            <button date-span class="applyBtn" id="pick-date"></button>
+            <button class="cancelBtn"></button>
+          </div>
+        </div>
+        <input type="daterange" ng-model="dateRange" id="date-range-input" format="l" />
+      </div>
+    </div>
+    <span class="global-year" ng-show="program.ProgramAge <= 1 && page === 'enrollment'">2014</span>
+    <nav class="global-time" ng-show="program.ProgramAge > 1 && page === 'enrollment'">
+        <span ng-repeat="timespan in program.TimePeriods" ng-class="{ active: viewParameters.timespan === timespan }" timespan timespan-val="{{ timespan }}">{{ timespan | capitalize }}</span>
+    </nav>
+    <div ng-include src="'views/dash/export.html'"></div>
+</div>
+<div class="dash-content">
+    <ul class="modules">
+        <li ng-repeat="module in enrollmentdata.ModuleTypes" ng-include src=" ' views/enrollment/module.html ' " class="module" module id="{{ module }}">
+        </li>
+       <!--  <li ng-include src="'views/dash/testmodule.html'" class="module"></li> -->
+    </ul>
+</div>
+</div>
+</div>

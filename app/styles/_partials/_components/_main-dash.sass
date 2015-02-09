@@ -1,0 +1,347 @@
+
+.title-with-button
+    display: block
+    vertical-align: middle
+    margin-bottom: .5em
+    +box-sizing(border-box)
+    +break-min($main-header-break)
+        display: block
+        margin-bottom: 0
+        width: auto
+
+.export-data
+    color: $dark-grey
+    margin-left: 0
+    +break-min($main-header-break)
+        font-size: 1em
+
+.export-data-modal
+    background-color: white(.7)
+    padding: 1rem
+    h1
+        margin: 0
+        font-size: 1.5rem
+    +before
+        border-color: transparent transparent white(.7)
+        left: 1rem
+    +break-min($main-header-break)
+        position: absolute
+        z-index: 1
+        left: 1rem
+        top: 7.5rem
+        min-width: 20rem
+        background-color: white(.95)
+        +border-radius(2px)
+        +box-shadow(black(.15) 0 2px 5px)
+        +before
+            left: .5rem
+            border-color: transparent transparent white(.95)
+
+.export-data-options
+    margin: 1rem 0
+    > fieldset
+        border: none
+        margin: 0
+        padding: 1rem 0
+        overflow: hidden
+        > legend
+            margin: 0
+            font-size: 1.2rem
+            color: $dark-grey-2
+            border-bottom: solid 1px black(.1)
+            line-height: 1.5rem
+            width: 100%
+    .exp
+        font-size: .7em
+        font-style: italic
+        padding: 0 1em
+    .option
+        display: none
+        &:checked + .option-label
+            > span
+                background-color: black(.25)
+    .option-label
+        +box-sizing(border-box)
+        width: 50%
+        display: inline-block
+        vertical-align: top
+        padding: 0
+        > span
+            display: block
+            padding: 0 .5rem
+            line-height: 2.5em
+            background-color: black(.1)
+            +border-radius(3px)
+            text-align: center
+            +transition-property(background-color)
+            +transition-duration(.2s)
+            position: relative
+            cursor: pointer
+        &:nth-of-type(2n-1)
+            padding-right: .5rem
+        &:nth-of-type(2n)
+            padding-left: .5rem
+    .btn
+        +reset-input-appearance
+        text-align: center
+        font-size: 1rem
+        line-height: 2rem
+        background-color: rgba(77, 197, 242, .6)
+        border: none
+        +border-radius(3px)
+        padding: .3rem 2rem
+        color: $dark-grey-2
+        font-family: "PT Sans"
+        +transition-property(background-color)
+        +transition-duration(.2s)
+        cursor: pointer
+        &:focus, &:hover
+            outline: none
+            background-color: rgba(77, 197, 242, .8)
+    .option-checked
+        position: absolute
+        top: 50%
+        bottom: 0
+        margin-top: -.5rem
+        font-size: 1rem
+        right: .5rem
+        width: 2rem
+        text-align: center
+        line-height: 100%
+
+    .submit-wrap
+        margin-top: 1rem
+        text-align: right
+
+
+
+.display-option-date
+    display: inline-block
+    margin-left: .5rem
+    cursor: pointer
+    > .show-hide-btn
+        +border-left-radius(0)
+        margin-left: 0
+
+.daterangepicker
+    overflow: hidden
+    padding: .5rem
+    .calendar
+        width: 100%
+        padding: 0
+        margin: 1rem 0
+        line-height: 2rem
+        text-align: center
+        +box-sizing(border-box)
+        border: solid 1px black(.1)
+        +break-min($cal-break)
+            width: 50%
+            border: none
+            padding: 1rem
+            margin: 0
+        &.left
+            float: left
+        &.right
+            float: right
+    .table-condensed
+        width: 100%
+        border-collapse: collapse
+        border-spacing: 0
+        td
+            cursor: pointer
+    thead > tr:first-child
+        border-bottom: solid 1px black(.05)
+        +break-min($cal-break)
+            border: none
+    .available
+        background-color: rgba(77, 197, 242, 0.2)
+        +transition-property(background-color)
+        +transition-duration(.15s)
+        &:hover
+            background-color: rgba(77, 197, 242, 0.5)
+    .in-range, .right .disabled + .available
+        background-color: $light-blue
+        +transition-property(background-color)
+        +transition-duration(.15s)
+        &:hover
+            background-color: $dark-blue
+    .start-date, .end-date
+        &:not(.active)
+            background-color: $light-blue
+    .off.available + td:not(.off), .available:not(.off) + .available.off
+        font-weight: bold
+    .off.disabled
+        cursor: default
+        color: #ccc
+    .right .end-date, .left .start-date
+        background-color: $dark-blue
+        +transition-property(background-color)
+        +transition-duration(.15s)
+        &:hover
+            background-color: $dark-blue-2
+    .prev, .next
+        cursor: pointer
+        background-color: black(.05)
+        +break-min($cal-break)
+            background-color: transparent
+            &:hover
+                background-color: transparent
+    .first
+        font-weight: bold
+    .input-mini
+        +reset-input-appearance
+        border: 0
+        background-color: black(.1)
+        font-size: 1rem
+        font-family: "PT Sans"
+        color: $dark-grey
+        padding: .5rem
+        +border-radius(3px)
+        &:focus
+            outline: none
+            background-color: black(.15)
+    .ranges
+        clear: both
+        label
+            padding: 0 .5rem
+            min-width: 2rem
+            display: inline-block
+            text-transform: lowercase
+    .range_inputs
+        overflow: hidden
+        > div
+            +box-sizing(border-box)
+            padding: 0 .5rem
+            +break-min($cal-break)
+                width: 50%
+                float: left
+    .btn
+        +reset-input-appearance
+        font-size: 1rem
+        color: $dark-grey
+        padding: .5rem 1.5rem
+        font-family: "PT Sans"
+        border: 0
+        +border-radius(3px)
+        float: right
+        margin-left: 1rem
+        cursor: pointer
+        line-height: 1.25em
+        +transition-property(background-color)
+        +transition-duration(.15s)
+        &:focus
+            outline: none
+    .applyBtn
+        background-color: $light-blue
+        &:hover, &:focus
+            background-color: $light-blue-2
+        &.disabled
+            background-color: $light-grey-2
+            cursor: default
+            &:hover, &:focus
+                background-color: $light-grey-2
+    .cancelBtn
+        background-color: $light-grey-2
+        &:hover, &:focus
+            background-color: #ddd
+
+.date-range-error
+    display: none
+    background-color: $dark-red
+    color: $white
+    padding: 1rem
+    +border-radius(3px)
+    margin: 1rem 0
+    +box-sizing(border-box)
+    .fa
+        font-size: 3rem
+        width: 20%
+        text-align: center
+    span
+        display: inline-block
+        vertical-align: middle
+        +box-sizing(border-box)
+    strong
+        font-size: 1.2em
+    .error-text
+        padding: 0 .5rem
+        width: 80%
+        line-height: 1.3em
+
+#date-range-input
+    display: none
+
+.date-range
+    display: inline-block
+    height: 36px
+    font-size: 1rem
+    font-weight: normal
+    line-height: 36px
+    padding: 0 .75em
+    background-color: black(.1)
+    border: 1px solid black(.4)
+    +border-radius(2px)
+    vertical-align: top
+    min-width: 6rem
+
+.date-options-drawer
+    background-color: white(.7)
+    padding: 1rem .5rem
+    +before
+        left: 10rem
+        border-color: transparent transparent white(.7)
+    +break-min($main-header-break)
+        position: absolute
+        z-index: 1
+        left: 2rem
+        top: 9rem
+        min-width: 36rem
+        background-color: white(.95)
+        +border-radius(2px)
+        +box-shadow(black(.15) 0 2px 5px)
+        +before
+            left: 9rem
+            border-color: transparent transparent white(.95)
+    +break-min($main-break)
+        +before
+            left: 10rem
+
+.date-options
+    margin: 0
+    padding: 0
+    list-style-type: none
+
+#date-options
+    > h2
+        margin: 0 .5rem
+        font-size: 1.2rem
+        color: $dark-grey-2
+        border-bottom: solid 1px black(.1)
+        line-height: 1.5rem
+
+.date-options-section
+    margin: 0
+    padding: .5rem 0
+
+.date-option
+    display: inline-block
+    width: (1/3)*100%
+    padding: 0 .5rem
+    +box-sizing(border-box)
+    text-align: center
+    > span
+        background-color: black(.05)
+        +border-radius(2px)
+        display: inline-block
+        line-height: 1em
+        padding: .75em 1em
+        cursor: pointer
+        +transition-property(background-color)
+        +transition-duration(.2s)
+        &:hover
+            background-color: black(.2)
+    &.active > span
+        background-color: black(.15)
+        &:hover
+            background-color: black(.2)
+
