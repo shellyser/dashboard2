@@ -158,7 +158,7 @@ angular.module('dashApp')
 	      		  	console.log(scope.mapData[attrs.mapContent]);
 	      		  	elt.closest('.module').find('.module-view-options').hide();
 	      		 	 // go straight to drawing the graph -- we don't need to do anything else
-	      		  	drawMap(elt, scope.mapData[attrs.mapContent]);
+	      		  	showMapArea(scope.mapData);
 	      		}
 	      		// case 2: graph's info DOES NOT EXIST in scope
 	      		// we should never hit this point, since this condition
@@ -229,7 +229,8 @@ angular.module('dashApp')
 	      		 //    .find('.module')
 	      		 //    .css('width');
 	      		 console.log(canvas);
-	      		 var heatMapData = [];
+	      		 var heatMapData = [],
+	      		 	heatmap;
 
 	      		 for (var i in data.points){
 	      		 	var point = data.points[i];
@@ -244,19 +245,20 @@ angular.module('dashApp')
 	      		 }
 	      		 	console.log(heatMapData);
 
-	      		    var newYork = new google.maps.LatLng(40.7127, 74.0059),
+	      		    var mapOptions = {
+	      		     	zoom: 10,
+	      		      	center: new google.maps.LatLng(40.7127, -74.0059)
 
-	      		    map = new google.maps.Map(document.getElementById('map-canvas'), {
-	      		      center: newYork,
-	      		      zoom: 13,
-	      		      mapTypeId: google.maps.MapTypeId.SATELLITE
+	    		    };
+	    		    var height = $('#map-canvas').parent().css('height');
+	    		    $('#map-canvas').css('height', height);
+	      		    var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+	      		    var pointArray = new google.maps.MVCArray(heatMapData);
+	      		    heatmap = new google.maps.visualization.HeatmapLayer({
+	      		      data: pointArray
 	      		    });
-
-	      		    var heatmap = new google.maps.visualization.HeatmapLayer({
-	      		      data: heatMapData
-	      		    });
-	      		    heatmap.setMap(map);
-	      		    showMapArea(true);
+	      		    		// elt.closest('.module-body').find('.module-loading').fadeOut();
+		      			heatmap.setMap(map);
 	      	}
 
 		      	function showLoading(){
@@ -274,16 +276,13 @@ angular.module('dashApp')
 
 		      	function showMapArea(data){
 		      		elt.closest('.module-body').find('.module-loading').fadeOut();
-		      		if (data ===  true || data === undefined){
+		      		if (data ===  true || data != undefined){
 		      			elt.parent().fadeIn();
+		      			google.maps.event.addDomListener(window, 'load', drawMap(elt, scope.mapData[attrs.mapContent]));
 		      		}
 		      		if (data === false || data === undefined){
 		      			elt.parent().next().fadeIn();
 		      		}
-		      		initialize();
-		      	}
-		      	function initialize() {
-		      	  google.maps.event.addDomListener(window, 'load', initialize);
 		      	}
 		 }
     	}

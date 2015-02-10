@@ -32,7 +32,7 @@ angular.module('dashApp')
           else if (name === 'Callable Load'){
             str = 'online';
           }
-          // var str = 'signup';
+          var str = 'signup';
           // $http.get(url + str + "?startDate=" + startDate + "&endDate=" + endDate, { timeout: timeout })
             var enrollment = Enrollmentdata[str]({"startDate": startDate, "endDate": endDate}, 
               function(data){

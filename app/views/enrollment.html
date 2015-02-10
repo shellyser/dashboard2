@@ -4,7 +4,7 @@
     </div>    
     <div class="global-filter">
     <div class="calendar"><span class="fa fa-file show-hide-btn export-data" title="Export data as CSV" trigger trigger-target="export-data-modal" id="export-data-btn"></span><span class="show-hide-btn trigger fa fa-cog hide-large" trigger trigger-target="main-utils" trigger-closed-class="fa-cog" trigger-open-class="fa-cog" title="Settings"></span><span id="date-range-trigger" class="display-option-date" trigger trigger-target="date-options">
-      <span class="date-range">6/1/14 - 8/1/14</span><span class="show-hide-btn fa fa-calendar" title="Date Range"></span>
+      <span class="date-range">{{ viewParameters.startMonth }}/{{ viewParameters.startDay }}/{{ viewParameters.startYear | yearify }} - {{ viewParameters.endMonth }}/{{ viewParameters.endDay }}/{{ viewParameters.endYear | yearify }}</span><span class="show-hide-btn fa fa-calendar" title="Date Range"></span>
       </span></div>
       <div class="main-utils drawer closed" id="main-utils">
         <div class="main-utils-options-wrap">
@@ -61,7 +61,6 @@
     <ul class="modules">
         <li ng-repeat="module in enrollmentdata.ModuleTypes" ng-include src=" ' views/enrollment/module.html ' " class="module" module id="{{ module }}">
         </li>
-       <!--  <li ng-include src="'views/dash/testmodule.html'" class="module"></li> -->
     </ul>
 </div>
 </div>
