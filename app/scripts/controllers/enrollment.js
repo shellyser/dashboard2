@@ -16,26 +16,28 @@ angular.module('dashApp')
 	// var cache = $cacheFactory(enrollmentData);
     $scope.viewParameters = {};
     // if (cache.get('defaults') === undefined){
-	    	$scope.enrollmentdata = enrollmentData;
-	        console.log(enrollmentData);
-	        $('#loading').fadeOut();
-	        
-	        var dates = [];
-	        if (enrollmentData.dateSpans === undefined){
-		        dates = [7, 14, 30];
-		        $scope.enrollmentdata.DateSpans = dates;
-	        }
-	        else{
-		        dates = enrollmentData.dateSpans;
-	   		 }
+    	$scope.enrollment = enrollmentData;
+        console.log(enrollmentData);
+        $('#loading').fadeOut();        
+        var date;
+        if (enrollmentData.Defaults.DateSpan === undefined){
+	        date = 7;
+	        $scope.enrollment.DateSpan = date;
+	        	        console.log(date);
+
+        }
+        else{
+	        date = enrollmentData.Defaults.DateSpan;
+	        console.log(date);
+   		 }
         var yesterday = new Date();
         var dayOfMonth = yesterday.getDate();
             yesterday.setDate(dayOfMonth - 1); 
         var tempEndDate = new Date(yesterday),
             tempStartDate = new Date(yesterday);
-            tempStartDate.setDate(tempStartDate.getDate() - (dates[0] - 1));
+            tempStartDate.setDate(tempStartDate.getDate() - (date - 1));
         $scope.defaults = {
-			 datespan: "Past " + dates[0] + " Days",
+			 datespan: "Past " + date + " Days",
 			 endDay: tempEndDate.getDate(),
 			 endMonth: tempEndDate.getMonth() + 1,
 			 endYear: tempEndDate.getFullYear(),
@@ -44,7 +46,7 @@ angular.module('dashApp')
 			 startMonth: tempStartDate.getMonth() + 1,
 			 startYear: tempStartDate.getFullYear(),
 			 startDate: (tempStartDate.getMonth() + 1) + '-' + tempStartDate.getDate() + '-' + tempStartDate.getFullYear(),
-			 timespan: enrollmentData.Defaults.Timespan,
+			 // timespan: enrollmentData.Defaults.Timespan,
 			 view: enrollmentData.Defaults.View,
 			 unit: enrollmentData.Defaults.Unit,
 			 communication: enrollmentData.Defaults.Communication, 
@@ -52,8 +54,8 @@ angular.module('dashApp')
 			 viewtype: enrollmentData.Defaults.ViewType
         };
         $scope.radiobutton = $scope.defaults.viewtype;
-           if ($scope.enrollmentdata.Products.indexOf('Customer') < 0 && $scope.enrollmentdata.Products.indexOf('customer') < 0){
-			$scope.enrollmentdata.Products.push('Customer');
+           if ($scope.enrollment.Products.indexOf('Customer') < 0 && $scope.enrollment.Products.indexOf('customer') < 0){
+			$scope.enrollment.Products.push('Customer');
         }
         // $scope.$broadcast('defaults', $scope.defaults);
         $scope.viewParameters = $scope.defaults;
@@ -82,8 +84,8 @@ angular.module('dashApp')
 	// $scope.drawGraph = function(id){
  //        $scope.$broadcast('redraw', id);
  //     };
-      // $scope.$on('defaults', function(event, data){
-      //   $scope.viewParameters = $scope.defaults;
-      //    console.log($scope.viewParameters);
-      // });
+      $scope.$on('defaults', function(event, data){
+        $scope.viewParameters = $scope.defaults;
+         console.log($scope.viewParameters);
+      });
 });

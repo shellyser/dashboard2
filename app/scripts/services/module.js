@@ -15,16 +15,16 @@ angular.module('dashApp')
     // AngularJS will instantiate a singleton by calling "new" on this function
     var cache = $cacheFactory('modules');
 
-    function getModule(name, startDate, endDate, success, failure){
+    function getModule(name, startDate, endDate, unit, success, failure){
         var cacheData = cache.get(name);
 
         if (cacheData === undefined || startDate !== null){
-          var str = 'signup';
+          var str = 'signups';
           if (name === 'Distributed'){
             str = 'distributed';
           }
           else if (name === 'Set-ups'){
-            str = 'setup';
+            str = 'setups';
           }
           // else if (name === 'Opt-outs'){
           //   str = 'optout';
@@ -34,7 +34,7 @@ angular.module('dashApp')
           }
           // var str = 'signup';
           // $http.get(url + str + "?startDate=" + startDate + "&endDate=" + endDate, { timeout: timeout })
-            var enrollment = Enrollmentdata[str]({"startDate": startDate, "endDate": endDate}, 
+            var enrollment = Enrollmentdata[str]({"startDate": startDate, "endDate": endDate, "unit": unit}, 
               function(data){
               if (success){
                   

@@ -37,7 +37,7 @@ angular.module('dashApp')
 
             startDateMinusOne.setDate(startDateMinusOne.getDate()-1);
             startDateMinusOne = (startDateMinusOne.getMonth() + 1) + '-' + startDateMinusOne.getDate() + '-' + startDateMinusOne.getFullYear();
-            module.getModule(attrs.graphContent, startDateMinusOne, newValue.endDate, populateModule, noData);
+            module.getModule(attrs.graphContent, startDateMinusOne, newValue.endDate, scope.viewParameters.unit, populateModule, noData);
            }
            else{
            	module.getModule(attrs.graphContent, null, null, populateModule, noData);
@@ -55,7 +55,7 @@ angular.module('dashApp')
 		var startStr = newStart.getMonth() + '-' + newStart.getDate() + '-' + newStart.getFullYear();
 		console.log(startStr);
 		var endDate = scope.viewParameters.endMonth + "-" + scope.viewParameters.endDay + "-" + scope.viewParameters.endYear;
-		module.getModule(id, startStr, endDate, populateModule, noData);
+		module.getModule(id, startStr, endDate, scope.viewParameters.unit, populateModule, noData);
 	});
 
 	var dataMultipleSets = {

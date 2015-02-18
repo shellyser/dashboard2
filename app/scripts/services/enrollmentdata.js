@@ -8,7 +8,7 @@ angular.module('dashApp')
         startDate: "@startDate",
         endDate: "@endDate",
         communicationType: "@communicationType",
-        product: "@product",
+        unit: "@unit",
         
       },
       {
@@ -19,15 +19,15 @@ angular.module('dashApp')
           },
           isArray: false
         },
-        'signup': {
+        'signups': {
           method: "GET",
           isArray: false,
           params: {
-            enrollmentController: "signup",
+            enrollmentController: "signups",
             startDate: "startDate",
-            endDate: "endDate"
+            endDate: "endDate",
             // communicationType: "communicationType",
-            // product: "product"
+            unit: "unit"
           }
         },
         'distributed': {
@@ -37,18 +37,18 @@ angular.module('dashApp')
             startDate: "startDate",
             endDate: "endDate"
             // communicationType: "communicationType",
-            // product: "product"
+            // unit: "unit"
           },
           isArray: false
         },
-        'setup': {
+        'setups': {
           method: "GET",
           params: {
-            enrollmentController: "setup",
+            enrollmentController: "setups",
             startDate: "startDate",
             endDate: "endDate"
             // communicationType: "communicationType",
-            // product: "product"
+            // unit: "unit"
           },
           isArray: false
         },
@@ -59,7 +59,7 @@ angular.module('dashApp')
             startDate: "startDate",
             endDate: "endDate"
             // communicationType: "communicationType",
-            // product: "product"
+            // unit: "unit"
           },
           isArray: false
         },
@@ -70,7 +70,7 @@ angular.module('dashApp')
             startDate: "startDate",
             endDate: "endDate"
             // communicationType: "communicationType",
-            // product: "product"
+            // unit: "unit"
           },
           isArray: false
         }

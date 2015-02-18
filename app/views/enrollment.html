@@ -9,13 +9,13 @@
       <div class="main-utils drawer closed" id="main-utils">
         <div class="main-utils-options-wrap">
             <select class="main-utils-options" view-type>
-                <option ng-repeat="view in enrollmentdata.GlobalViewTypes" ng-selected="view.toLowerCase() === viewParameters.view.toLowerCase()" value="{{ view | capitalize }}">{{ view | capitalize }} view</option>
+                <option ng-repeat="view in enrollment.GlobalViewTypes" ng-selected="view.toLowerCase() === viewParameters.view.toLowerCase()" value="{{ view | capitalize }}">{{ view | capitalize }} view</option>
             </select>
             <select class="main-utils-options" metric>
-                <option ng-repeat="product in enrollmentdata.Products" ng-selected="product.toLowerCase() === viewParameters.unit.toLowerCase()" value="{{ product }}">By {{ product | capitalize }}</option>
+                <option ng-repeat="product in enrollment.Products" ng-selected="product.toLowerCase() === viewParameters.unit.toLowerCase()" value="{{ product }}">By {{ product | capitalize }}</option>
             </select>
-        </div><ul ng-show="enrollmentdata.CommunicationTypes.length > 1"  class="main-utils-gateways">
-            <li ng-repeat="commType in enrollmentdata.CommunicationTypes" ng-class="{ active: (viewParameters.communication).indexOf(enrollmentdata.CommunicationTypeSlugs[$index]) > -1 }" communication-type communication-type-name={{enrollmentdata.CommunicationTypeSlugs[$index]}}>
+        </div><ul ng-show="enrollment.CommunicationTypes.length > 1"  class="main-utils-gateways">
+            <li ng-repeat="commType in enrollment.CommunicationTypes" ng-class="{ active: (viewParameters.communication).indexOf(enrollment.CommunicationTypeSlugs[$index]) > -1 }" communication-type communication-type-name={{enrollment.CommunicationTypeSlugs[$index]}}>
                 <span class="gateway">{{ commType | capitalize }}</span>
             </li>
         </ul>
@@ -59,7 +59,7 @@
 </div>
 <div class="dash-content">
     <ul class="modules">
-        <li ng-repeat="module in enrollmentdata.ModuleTypes" ng-include src=" ' views/enrollment/module.html ' " class="module" module id="{{ module }}">
+        <li ng-repeat="module in enrollment.ModuleTypes" ng-include src=" ' views/enrollment/module.html ' " class="module" module id="{{ module }}">
         </li>
     </ul>
 </div>

@@ -6,7 +6,8 @@
         "Kühl"
     ],
     "Products": [
-        "AC"
+        "AC",
+        "Customer"
     ],
     "CommunicationTypeSlugs": [
         "ethernet",
@@ -29,20 +30,19 @@
         "cumulative"
     ],
     "ViewTypes": [
-      "Map",
-      "Graph"
+        "Graph",
+        "Map"
     ],
     "Defaults": {
-        "Timespan": "2014",
         "View": "DayByDay",
         "Unit": "AC",
+        "DateSpan": "7",
         "Communication": [
             "ethernet",
             "usb",
             "wifi",
             "kuhl"
         ],
-        "Points": 7,
-        "ViewType": "Map"
+        "ViewType": "Graph"
     }
 }
