@@ -16,10 +16,7 @@
         "kuhl"
     ],
     "ModuleTypes": [
-        "Sign-ups",
-        "Distributed",
-        "Set-ups",
-        "Callable Load"
+        "Sign-ups"
     ],
     "TimePeriods": [
         "2014",
@@ -35,7 +32,7 @@
     ],
     "Defaults": {
         "View": "DayByDay",
-        "Unit": "AC",
+        "Product": "AC",
         "DateSpan": "7",
         "Communication": [
             "ethernet",

@@ -27,23 +27,23 @@ angular.module('dashApp')
       	if (newValue){
       		showLoading();
 
-      		if ((newValue.startDate !== oldValue.startDate) || (newValue.endDate !== oldValue.endDate)){
-            // otherwise, start date is exclusive, and we want it to be inclusive.
-            var startDateMinusOne = new Date(
-            	newValue.startDate.split('-')[2],
-              newValue.startDate.split('-')[0] - 1,//1-12
-              newValue.startDate.split('-')[1]
-              );
+    		if ((newValue.startDate !== oldValue.startDate) || (newValue.endDate !== oldValue.endDate)){
+          // otherwise, start date is exclusive, and we want it to be inclusive.
+          var startDateMinusOne = new Date(
+          	newValue.startDate.split('-')[2],
+            newValue.startDate.split('-')[0] - 1,//1-12
+            newValue.startDate.split('-')[1]
+            );
 
-            startDateMinusOne.setDate(startDateMinusOne.getDate()-1);
-            startDateMinusOne = (startDateMinusOne.getMonth() + 1) + '-' + startDateMinusOne.getDate() + '-' + startDateMinusOne.getFullYear();
-            module.getModule(attrs.graphContent, startDateMinusOne, newValue.endDate, scope.viewParameters.unit, populateModule, noData);
-           }
-           else{
-           	module.getModule(attrs.graphContent, null, null, populateModule, noData);
-           }
-          }
-         }, true);
+          startDateMinusOne.setDate(startDateMinusOne.getDate()-1);
+          startDateMinusOne = (startDateMinusOne.getMonth() + 1) + '-' + startDateMinusOne.getDate() + '-' + startDateMinusOne.getFullYear();
+          module.getModule(attrs.graphContent, startDateMinusOne, newValue.endDate, scope.viewParameters.unit, populateModule, noData);
+        }
+        else{
+          module.getModule(attrs.graphContent, null, null, populateModule, noData);
+        }
+      }
+  }, true);
 
 	scope.$on('redraw', function(event, id){
 		var newStart = new Date(
