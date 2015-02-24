@@ -19,17 +19,20 @@ angular.module('dashApp')
 			function populateModule(data){
 				console.log("I'm here!");
 				var labels = [],
-						dataPoints = [],
+						points = [],
 						signupData = {},
-						graphData = {};
+						graphData = {},
+						dataPoints = {};
+
 				signupData = data.Cohort[0][2014].graphData;
 				labels = Object.keys(signupData);
 				for (var key in signupData){
-					dataPoints.push(signupData[key]);
+					points.push(signupData[key]);
 				}
-				graphData[labels] = labels;
-				graphData[datasets] = [];
-				graphData[datasets].push({data:dataPoints});
+				dataPoints.data = points;
+				graphData.labels = labels;
+				graphData.datasets = [];
+				graphData.datasets.push(dataPoints);
 				$scope.size();
 				var newGraph = new Chart(ctx);
 				newGraph.Line(graphData);
