@@ -6,7 +6,6 @@ angular.module('dashApp')
 			var ctx = $elem[0].getContext("2d");
 			var autosize = false;
 
-
 			$scope.size = function () {
 				$elem.width($elem.parent().width());
 				ctx.canvas.width = $elem.width();
@@ -18,24 +17,41 @@ angular.module('dashApp')
 
 			function populateModule(data){
 				console.log("I'm here!");
-				var labels = [],
+				var dates = [],
+						labels = [],
 						points = [],
 						signupData = {},
 						graphData = {},
-						dataPoints = {};
+						dataPoints = {},
+						counter = 0,
+						cumCounter = 0;
 
 				signupData = data.Cohort[0][2014].graphData;
-				labels = Object.keys(signupData);
+				cumCounter = data.Cohort[0][2014].totals;
+				dates = Object.keys(signupData);
+
+				for (var i in dates){
+					labels.push(dates[i].slice(0, -5));
+				}
+
 				for (var key in signupData){
 					points.push(signupData[key]);
+					counter = counter + signupData[key];
 				}
+
 				dataPoints.data = points;
 				graphData.labels = labels;
 				graphData.datasets = [];
 				graphData.datasets.push(dataPoints);
+				
 				$scope.size();
 				var newGraph = new Chart(ctx);
 				newGraph.Line(graphData);
+				if (newGraph.Line){
+					$elem.closest('.module-body').find('.module-loading').fadeOut();
+				}
+
+				$elem.closest('.module-body').find('.module-body-stat').text(counter);
 			}
 
 			function noData(){
