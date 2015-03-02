@@ -23,7 +23,7 @@ angular.module('dashApp')
           method: "GET",
           isArray: false,
           params: {
-            enrollmentController: "signup",
+            enrollmentController: "SignupCtrl",
             startDate: "startDate",
             endDate: "endDate",
             // communicationType: "communicationType",

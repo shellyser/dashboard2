@@ -1,5 +1,5 @@
 {
-    "CommunicationTypes": [
+    "Communications": [
         "Ethernet",
         "USB",
         "Wifi",
@@ -15,14 +15,14 @@
         "wifi",
         "kuhl"
     ],
-    "ModuleTypes": [
+    "Modules": [
         "Sign-ups"
     ],
     "TimePeriods": [
         "2014",
         "AllYears"
     ],
-    "GlobalViewTypes": [
+    "GlobalViews": [
         "DayByDay",
         "cumulative"
     ],
@@ -30,6 +30,7 @@
         "Graph",
         "Map"
     ],
+    "DateSpan": 7,
     "Defaults": {
         "View": "DayByDay",
         "Product": "AC",

@@ -1,19 +1,19 @@
 angular.module('dashApp')
-.directive('signups', function (module) {
+.directive('signups', function () {
 	return {
 		restrict: 'A',
-		link: function postLink($scope, $elem, attrs) {
-			var ctx = $elem[0].getContext("2d");
+		link: function postLink(scope, elem, attrs) {
+			var ctx = elem[0].getContext("2d");
 			var autosize = false;
 
-			$scope.size = function () {
-				$elem.width($elem.parent().width());
-				ctx.canvas.width = $elem.width();
-				$elem.height($elem.parent().height());
+			scope.size = function () {
+				elem.width(elem.parent().width());
+				ctx.canvas.width = elem.width();
+				elem.height(elem.parent().height());
 				ctx.canvas.height = ctx.canvas.width / 2;
 			}
-			var params = $scope.viewParameters;
-			var graphData = module.getModule(attrs.graphContent, params.startDate, params.endDate, params.product, populateModule, noData);
+			var params = scope.enrollement;
+			var graphData = scope.signup
 
 			function populateModule(data){
 				console.log("I'm here!");
@@ -44,14 +44,14 @@ angular.module('dashApp')
 				graphData.datasets = [];
 				graphData.datasets.push(dataPoints);
 				
-				$scope.size();
+				scope.size();
 				var newGraph = new Chart(ctx);
 				newGraph.Line(graphData);
 				if (newGraph.Line){
-					$elem.closest('.module-body').find('.module-loading').fadeOut();
+					elem.closest('.module-body').find('.module-loading').fadeOut();
 				}
 
-				$elem.closest('.module-body').find('.module-body-stat').text(counter);
+				elem.closest('.module-body').find('.module-body-stat').text(counter);
 			}
 
 			function noData(){
@@ -61,7 +61,7 @@ angular.module('dashApp')
       	elt.closest('.module-body').prev().find('.module-stat').text('\u2014');
       }
 
-			// $scope.$watch('viewParameters', function(newValue, oldValue){
+			// scope.$watch('viewParameters', function(newValue, oldValue){
 			// 	if (newValue){
 			// 		//showLoading();
 			// 		if ((newValue.startDate !== oldValue.startDate) || (newValue.endDate !== oldValue.endDate)){
@@ -74,7 +74,7 @@ angular.module('dashApp')
 
 			//       startDateMinusOne.setDate(startDateMinusOne.getDate()-1);
 			//       startDateMinusOne = (startDateMinusOne.getMonth() + 1) + '-' + startDateMinusOne.getDate() + '-' + startDateMinusOne.getFullYear();
-			//       module.getModule(attrs.graphContent, startDateMinusOne, newValue.endDate, $scope.viewParameters.product, populateModule, noData);
+			//       module.getModule(attrs.graphContent, startDateMinusOne, newValue.endDate, scope.viewParameters.product, populateModule, noData);
 			//      }
 			//      else{
 			//      	module.getModule(attrs.graphContent, null, null, populateModule, noData);
