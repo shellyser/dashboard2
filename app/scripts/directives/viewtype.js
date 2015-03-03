@@ -12,7 +12,7 @@ angular.module('dashApp')
       restrict: 'A',
       link: function postLink(scope, elt) {
         elt.on('change', function(){
-          scope.viewParameters.view = elt.val();
+          scope.GlobalViewTypes = elt.val();
           scope.$apply();
         });
       }

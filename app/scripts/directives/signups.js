@@ -12,17 +12,20 @@ angular.module('dashApp')
 				elem.height(elem.parent().height());
 				ctx.canvas.height = ctx.canvas.width / 2;
 			}
-			var params = scope.enrollement;
-			var graphData = scope.signup
+			var params = scope.enrollment;
+			var data = scope.signup;
+
 
 			function populateModule(data){
 				console.log("I'm here!");
 				var dates = [],
 						labels = [],
-						points = [],
+						pointsDayByDay = [],
+						pointsCum = [],
 						signupData = {},
 						graphData = {},
-						dataPoints = {},
+						dataPointsDayByDay = {},
+						dataPointsCum = {},
 						counter = 0,
 						cumCounter = 0;
 
@@ -35,15 +38,32 @@ angular.module('dashApp')
 				}
 
 				for (var key in signupData){
-					points.push(signupData[key]);
+					pointsDayByDay.push(signupData[key]);
 					counter = counter + signupData[key];
+					cumCounter = cumCounter + signupData[key];
+					pointsCum.push(signupData[key]+ cumCounter);
 				}
 
-				dataPoints.data = points;
+				dataPointsDayByDay = {
+					label: "DayByDay",
+					data: pointsDayByDay
+				}
+
+				dataPointsCumulative = {
+					label: "Cumulative",
+					data: pointsCum
+				}
+
 				graphData.labels = labels;
 				graphData.datasets = [];
-				graphData.datasets.push(dataPoints);
+				graphData.datasets.push(dataPointsDayByDay);
+				graphData.datasets.push(dataPointsCumulative);
+
+				// scope.enrollment.ViewTypes[0] = {
+				// 	"graph": graphData.datasets[0]
+				// };
 				
+
 				scope.size();
 				var newGraph = new Chart(ctx);
 				newGraph.Line(graphData);
@@ -53,6 +73,8 @@ angular.module('dashApp')
 
 				elem.closest('.module-body').find('.module-body-stat').text(counter);
 			}
+
+			populateModule(data);
 
 			function noData(){
       	elt.parent().hide();

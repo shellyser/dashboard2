@@ -33,7 +33,8 @@ angular.module('dashApp')
 	};
 
 
-	$scope.radiobutton = $scope.enrollment.ViewType;
+	$scope.radiobutton = $scope.enrollment.ViewForms[0];
+	$scope.selectViewType = $scope.enrollment.ViewTypes[0];
 
 	if ($scope.enrollment.Products.indexOf('Customer') < 0 && $scope.enrollment.Products.indexOf('customer') < 0){
 		$scope.enrollment.Products.push('Customer');

@@ -1,5 +1,5 @@
 angular.module('dashApp')
-.controller('SignupCtrl',  function ($scope, enrollmentData) {
-    console.log("im here?");
-	$scope.signup = Enrollmentdata.signup({"startDate": null, "endDate": null, "product": null});
+.controller('SignupCtrl',  function ($scope, Enrollmentdata) {
+    var signupModule = 'signup';
+	$scope.signup = Enrollmentdata[signupModule]({"startDate": null, "endDate": null, "product": null});
 });

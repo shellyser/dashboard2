@@ -16,17 +16,17 @@
         "kuhl"
     ],
     "ModuleTypes": [
-        "Sign-ups"
+        "signup"
     ],
     "TimePeriods": [
         "2014",
         "AllYears"
     ],
-    "GlobalViewTypes": [
-        "DayByDay",
-        "cumulative"
-    ],
     "ViewTypes": [
+        "DayByDay",
+        "Cumulative"
+    ],
+    "ViewForms": [
         "Graph",
         "Map"
     ],

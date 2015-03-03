@@ -49,7 +49,7 @@ angular.module('dashApp', ['FormErrors', 'ngBootstrap', 'ui.router', 'ngResource
                             var EnrollmentData = Enrollmentdata.get();
                             return EnrollmentData.$promise;
                     }
-                }
+                }              
             }
         }           
     })

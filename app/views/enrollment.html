@@ -8,8 +8,7 @@
       </span></div>
       <div class="main-utils drawer closed" id="main-utils">
         <div class="main-utils-options-wrap">
-            <select class="main-utils-options" view-type>
-                <option ng-repeat="view in enrollment.GlobalViewTypes" ng-selected="view.toLowerCase() === enrollment.view.toLowerCase()" value="{{ view | capitalize }}">{{ view | capitalize }} view</option>
+            <select class="main-utils-options" ng-model="selectViewType" ng-options="view for view in enrollment.ViewTypes">
             </select>
             <select class="main-utils-options" metric>
                 <option ng-repeat="product in enrollment.Products" ng-selected="product.toLowerCase() === enrollment.unit.toLowerCase()" value="{{ product }}">By {{ product | capitalize }}</option>
@@ -57,7 +56,7 @@
     <ul class="modules">
         <!-- <li ng-repeat="module in enrollment.ModuleTypes" ng-include src=" ' views/enrollment/module.html ' " class="module" module id="{{ module }}">
         </li> -->
-        <li ng-repeat="module in enrollment.ModuleTypes" ng-include src=" ' views/enrollment/module.html ' " signups class="module" module id="{{ module }}">
+        <li ng-repeat="module in enrollment.ModuleTypes" ng-include src=" ' views/enrollment/signup.html ' " ng-controller="SignupCtrl" class="module" module id="{{ module }}">
         </li>
     </ul>
   </div>
