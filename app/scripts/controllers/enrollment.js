@@ -34,7 +34,7 @@ angular.module('dashApp')
 
 
 	$scope.radiobutton = $scope.enrollment.ViewForms[0];
-	$scope.selectViewType = $scope.enrollment.ViewTypes[0];
+	$scope.viewtype = $scope.enrollment.ViewTypes[0];
 
 	if ($scope.enrollment.Products.indexOf('Customer') < 0 && $scope.enrollment.Products.indexOf('customer') < 0){
 		$scope.enrollment.Products.push('Customer');
@@ -53,9 +53,12 @@ angular.module('dashApp')
 	//   $scope.viewParameters = $scope.defaults;
 	//   console.log($scope.viewParameters);
 	// }
-	$scope.total = 0;
-	$scope.mapData = {};
-	$scope.graphsData = {};
+
+	$scope.drawGraph = {};
+
+	$scope.update_graph = function(){
+		console.log($scope);
+	};
 
 	$scope.dateRange = {
 		startDate: moment().subtract(7, 'days'),

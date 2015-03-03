@@ -3,8 +3,55 @@ angular.module('dashApp')
 	return {
 		restrict: 'A',
 		link: function postLink(scope, elem, attrs) {
+			function populateGraph(){
 			var ctx = elem[0].getContext("2d");
-			var autosize = false;
+			var autosize = false,
+			animate = false,
+			labels = scope.graph.labels,
+			datasets = scope.graph.datasets[0],
+			underPointCountThreshold = labels.length <= 31,
+			options = {
+				scaleOverride: false,
+				scaleSteps: 10,
+				scaleFontFamily: 'PT Sans, sans-serif',
+				scaleFontStyle: 'bold',
+				scaleIntegersOnly: true,
+				bezierCurve: true,
+				pointDot: underPointCountThreshold,
+				pointDotStrokeWidth: 1,
+				datasetStroke : !underPointCountThreshold,
+				datasetStrokeWidth : 1,
+				scaleLabel: '<%=value%>',
+				responsive: true,
+				maintainAspectRatio: false,
+				tooltipTemplate: '<%= value %>',
+				multiTooltipTemplate: '<%= value %>',
+				tooltipFillColor: 'rgba(0, 0, 0, 0.6)',
+				tooltipFontFamily: 'PT Sans, sans-serif',
+				pointHitDetectionRadius: underPointCountThreshold ? Math.min(16, 16*(5/scope.graph.labels.length)) : 0,
+				showXLabels: underPointCountThreshold ? true : 31
+			},
+				lineColor,
+				fillColor,
+				color = $('canvas').closest('.module').find('.module-header').css('color');
+
+			// graph colors are based on the color of the bar at the top of the module
+			color = color.replace('rgb', 'rgba');
+			fillColor = color.replace(')', ', 0.3)');
+			lineColor = color.replace(')', ', 1)');
+
+			var moreDatasets = {
+				label: datasets.label,
+				fillColor: fillColor,
+				strokeColor: lineColor,//'rgba(0, 0, 0, 0)',
+				pointStrokeColor: lineColor,
+				pointColor: 'rgba(240, 240, 240, 1)',
+				data: datasets.data
+			}
+
+			scope.graph.datasets = moreDatasets;
+			options.animation = underPointCountThreshold ? animate : false;
+			options.animation = true;
 
 			scope.size = function () {
 				elem.width(elem.parent().width());
@@ -12,98 +59,18 @@ angular.module('dashApp')
 				elem.height(elem.parent().height());
 				ctx.canvas.height = ctx.canvas.width / 2;
 			}
-			var params = scope.enrollment;
-			var data = scope.signup;
-
-
-			function populateModule(data){
-				console.log("I'm here!");
-				var dates = [],
-						labels = [],
-						pointsDayByDay = [],
-						pointsCum = [],
-						signupData = {},
-						graphData = {},
-						dataPointsDayByDay = {},
-						dataPointsCum = {},
-						counter = 0,
-						cumCounter = 0;
-
-				signupData = data.Cohort[0][2014].graphData;
-				cumCounter = data.Cohort[0][2014].totals;
-				dates = Object.keys(signupData);
-
-				for (var i in dates){
-					labels.push(dates[i].slice(0, -5));
-				}
-
-				for (var key in signupData){
-					pointsDayByDay.push(signupData[key]);
-					counter = counter + signupData[key];
-					cumCounter = cumCounter + signupData[key];
-					pointsCum.push(signupData[key]+ cumCounter);
-				}
-
-				dataPointsDayByDay = {
-					label: "DayByDay",
-					data: pointsDayByDay
-				}
-
-				dataPointsCumulative = {
-					label: "Cumulative",
-					data: pointsCum
-				}
-
-				graphData.labels = labels;
-				graphData.datasets = [];
-				graphData.datasets.push(dataPointsDayByDay);
-				graphData.datasets.push(dataPointsCumulative);
-
-				// scope.enrollment.ViewTypes[0] = {
-				// 	"graph": graphData.datasets[0]
-				// };
 				
-
-				scope.size();
-				var newGraph = new Chart(ctx);
-				newGraph.Line(graphData);
-				if (newGraph.Line){
-					elem.closest('.module-body').find('.module-loading').fadeOut();
-				}
-
-				elem.closest('.module-body').find('.module-body-stat').text(counter);
+			scope.size();
+			var newGraph = new Chart(ctx).Line(scope.graph);
+			if (newGraph){
+				elem.closest('.module-body').find('.module-loading').fadeOut();
 			}
-
-			populateModule(data);
-
-			function noData(){
-      	elt.parent().hide();
-      	showGraphArea(false);
-      	elt.closest('.module-body').find('.module-body-stat').text('\u2014');
-      	elt.closest('.module-body').prev().find('.module-stat').text('\u2014');
-      }
-
-			// scope.$watch('viewParameters', function(newValue, oldValue){
-			// 	if (newValue){
-			// 		//showLoading();
-			// 		if ((newValue.startDate !== oldValue.startDate) || (newValue.endDate !== oldValue.endDate)){
-			//       // otherwise, start date is exclusive, and we want it to be inclusive.
-			//       var startDateMinusOne = new Date(
-			//       	newValue.startDate.split('-')[2],
-			//         newValue.startDate.split('-')[0] - 1,//1-12
-			//         newValue.startDate.split('-')[1]
-			//         );
-
-			//       startDateMinusOne.setDate(startDateMinusOne.getDate()-1);
-			//       startDateMinusOne = (startDateMinusOne.getMonth() + 1) + '-' + startDateMinusOne.getDate() + '-' + startDateMinusOne.getFullYear();
-			//       module.getModule(attrs.graphContent, startDateMinusOne, newValue.endDate, scope.viewParameters.product, populateModule, noData);
-			//      }
-			//      else{
-			//      	module.getModule(attrs.graphContent, null, null, populateModule, noData);
-			//      }
-			//     }
-		 // }, true);
-    	
-    }
+		}
+			scope.$watch('viewtype', function(newValue, oldValue) {
+        if (newValue)
+        	// newGraph.Line.destroy();
+        	populateGraph();
+      }, true);
+	  }
   };
 });

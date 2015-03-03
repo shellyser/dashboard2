@@ -8,7 +8,7 @@
       </span></div>
       <div class="main-utils drawer closed" id="main-utils">
         <div class="main-utils-options-wrap">
-            <select class="main-utils-options" ng-model="selectViewType" ng-options="view for view in enrollment.ViewTypes">
+            <select class="main-utils-options" ng-change="update_graph" ng-model="viewtype" ng-options="view for view in enrollment.ViewTypes">
             </select>
             <select class="main-utils-options" metric>
                 <option ng-repeat="product in enrollment.Products" ng-selected="product.toLowerCase() === enrollment.unit.toLowerCase()" value="{{ product }}">By {{ product | capitalize }}</option>
