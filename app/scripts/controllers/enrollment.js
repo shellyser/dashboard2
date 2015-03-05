@@ -48,10 +48,8 @@ angular.module('dashApp')
 	};
 
 	$scope.dateRange = {
-		startDate: moment().subtract(7, 'days'),
-		endDate: moment().subtract(1, 'days'),
-		minDate: moment('2014 01 01', 'YYYY MM DD'),
-		maxDate: moment().subtract(1, 'days')
+		endDate:  moment().endOf('day').subtract(1, 'days'),
+		startDate:  moment().startOf('day').subtract(7, 'days')
 	}
 
 });

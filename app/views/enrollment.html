@@ -6,15 +6,13 @@
     <div class="calendar">
       <span class="fa fa-file show-hide-btn export-data" title="Export data as CSV" trigger trigger-target="export-data-modal" id="export-data-btn"></span>
       <span class="show-hide-btn trigger fa fa-cog hide-large" trigger trigger-target="main-utils" trigger-closed-class="fa-cog" trigger-open-class="fa-cog" title="Settings"></span>
-      <span id="date-range-trigger" class="display-option-date" trigger trigger-target="date-options">
+      <span>
        <input
         type="daterange"
-        ng-model="dates"
-        min-date="2013-09-10"
-        max-date="2013-09-25"
-        limit="3 days"
+        ng-model="dateRange"
+        separator="-"
+        limit=""
         format="L"
-        separator="/"
         ranges="{'Special Range':{'startDate': '2013-09-2', 'endDate': '2013-09-5'}}"><span class="show-hide-btn fa fa-calendar" title="Date Range"></span>
       </span></div>
       <div class="main-utils drawer closed" id="main-utils">
