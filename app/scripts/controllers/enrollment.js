@@ -10,50 +10,37 @@
  */
 angular.module('dashApp')
 .controller('EnrollmentCtrl',  function ($scope, enrollmentData, user, $rootScope, $cacheFactory) {
-	// if (cache !== undefined){
-	// 	cache.removeAll();
-	// }
+
   var cache = $cacheFactory(enrollmentData);
-  // $scope.viewParameters = {};
-  // if (cache.get('defaults') === undefined){
+  var date = 7;
+
   $scope.enrollment = enrollmentData;
   $('#loading').fadeOut();        
-  var date = 7;
+
   if (enrollmentData.DateSpan === undefined){
     $scope.enrollment.DateSpan = date;
   }
   else{
     date = enrollmentData.DateSpan;
 	}
+
 	var endDate = moment().endOf('day').subtract(1, 'days').format("MM/DD/YYYY"),
-		startDate = moment().startOf('day').subtract(7, 'days').format("MM/DD/YYYY");
-	$scope.dates = {
+			startDate = moment().startOf('day').subtract(7, 'days').format("MM/DD/YYYY");
+	
+	$scope.params = {
 		endDate:  endDate,
 		startDate: startDate
 	};
 
+	$scope.params.viewtype = $scope.enrollment.ViewTypes[0];
+	$scope.params.product = $scope.enrollment.Products[0];
 
 	$scope.radiobutton = $scope.enrollment.ViewForms[0];
-	$scope.viewtype = $scope.enrollment.ViewTypes[0];
 
 	if ($scope.enrollment.Products.indexOf('Customer') < 0 && $scope.enrollment.Products.indexOf('customer') < 0){
 		$scope.enrollment.Products.push('Customer');
   }
   
-  // $scope.$broadcast('defaults', $scope.defaults);
-  // $scope.viewParameters = $scope.defaults;
-   // cache.put('defaults', $scope.defaults);
-    // }
-    // else{
-    //   // $scope.$broadcast('defaults', cache.get('defaults'));
-    //   // $scope.viewParameters = cache;
-    //   cache.get('defaults', $scope.defaults);
-    // }
-	// if ($scope.defaults !== undefined){
-	//   $scope.viewParameters = $scope.defaults;
-	//   console.log($scope.viewParameters);
-	// }
-
 	$scope.drawGraph = {};
 
 	$scope.update_graph = function(){
@@ -67,11 +54,4 @@ angular.module('dashApp')
 		maxDate: moment().subtract(1, 'days')
 	}
 
-	// $scope.drawGraph = function(id){
- //        $scope.$broadcast('redraw', id);
- //     };
-      // $scope.$on('defaults', function(event, data){
-      //   $scope.viewParameters = $scope.defaults;
-      //    console.log($scope.viewParameters);
-      // });
 });

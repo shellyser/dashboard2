@@ -1,5 +1,5 @@
 angular.module('dashApp')
-.directive('signups', function () {
+.directive('signupgraph', function () {
 	return {
 		restrict: 'A',
 		link: function postLink(scope, elem, attrs) {
@@ -49,7 +49,8 @@ angular.module('dashApp')
 				data: datasets.data
 			}
 
-			scope.graph.datasets = moreDatasets;
+			scope.graph.datasets = [];
+			scope.graph.datasets.push(moreDatasets);
 			options.animation = underPointCountThreshold ? animate : false;
 			options.animation = true;
 
@@ -66,7 +67,7 @@ angular.module('dashApp')
 				elem.closest('.module-body').find('.module-loading').fadeOut();
 			}
 		}
-			scope.$watch('viewtype', function(newValue, oldValue) {
+			scope.$watch('graph', function(newValue, oldValue) {
         if (newValue)
         	// newGraph.Line.destroy();
         	populateGraph();

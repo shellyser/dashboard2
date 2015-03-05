@@ -3,23 +3,34 @@
       <h1>Enrollment / Program Management</h1>
     </div>    
     <div class="global-filter">
-    <div class="calendar"><span class="fa fa-file show-hide-btn export-data" title="Export data as CSV" trigger trigger-target="export-data-modal" id="export-data-btn"></span><span class="show-hide-btn trigger fa fa-cog hide-large" trigger trigger-target="main-utils" trigger-closed-class="fa-cog" trigger-open-class="fa-cog" title="Settings"></span><span id="date-range-trigger" class="display-option-date" trigger trigger-target="date-options">
-      <span class="date-range">{{ dates.startDate }} - {{ dates.endDate }}</span><span class="show-hide-btn fa fa-calendar" title="Date Range"></span>
+    <div class="calendar">
+      <span class="fa fa-file show-hide-btn export-data" title="Export data as CSV" trigger trigger-target="export-data-modal" id="export-data-btn"></span>
+      <span class="show-hide-btn trigger fa fa-cog hide-large" trigger trigger-target="main-utils" trigger-closed-class="fa-cog" trigger-open-class="fa-cog" title="Settings"></span>
+      <span id="date-range-trigger" class="display-option-date" trigger trigger-target="date-options">
+       <input
+        type="daterange"
+        ng-model="dates"
+        min-date="2013-09-10"
+        max-date="2013-09-25"
+        limit="3 days"
+        format="L"
+        separator="/"
+        ranges="{'Special Range':{'startDate': '2013-09-2', 'endDate': '2013-09-5'}}"><span class="show-hide-btn fa fa-calendar" title="Date Range"></span>
       </span></div>
       <div class="main-utils drawer closed" id="main-utils">
         <div class="main-utils-options-wrap">
-            <select class="main-utils-options" ng-change="update_graph" ng-model="viewtype" ng-options="view for view in enrollment.ViewTypes">
+            <select class="main-utils-options" ng-model="params.viewtype" ng-options="view for view in enrollment.ViewTypes">
             </select>
-            <select class="main-utils-options" metric>
-                <option ng-repeat="product in enrollment.Products" ng-selected="product.toLowerCase() === enrollment.unit.toLowerCase()" value="{{ product }}">By {{ product | capitalize }}</option>
+            <select class="main-utils-options" ng-model="params.product" ng-options="product for product in enrollment.Products">
             </select>
-        </div><ul ng-show="enrollment.CommunicationTypes.length > 1"  class="main-utils-gateways">
+        </div>
+        <ul ng-show="enrollment.CommunicationTypes.length > 1"  class="main-utils-gateways">
             <li ng-repeat="commType in enrollment.CommunicationTypes" ng-class="{ active: (enrollment.communication).indexOf(enrollment.CommunicationTypeSlugs[$index]) > -1 }" communication-type communication-type-name={{enrollment.CommunicationTypeSlugs[$index]}}>
                 <span class="gateway">{{ commType | capitalize }}</span>
             </li>
         </ul>
     </div>
-    <div id="date-options" class="date-options-drawer drawer closed">
+<!--     <div id="date-options" class="date-options-drawer drawer closed">
       <div class="date-options-section" id="date-range-wrap">
         <div id="date-range-content" data-min-date="" date-max-date="" class="daterangepicker dropdown-menu">
           <div class="ranges">
@@ -48,7 +59,7 @@
           </div>
         </div>
         <input type="daterange" ng-model="dateRange" id="date-range-input" format="l" />
-      </div>
+      </div> -->
     </div>
     <!-- <div ng-include src="'views/dash/export.html'"></div> -->
   </div>

@@ -3,15 +3,7 @@ angular.module('dashApp')
     var signupModule = 'signup';
     $scope.count = { total: 0 };
 
-    
-
-  //   $scope.drawGraph = function (value){
-		// Enrollmentdata[signupModule]({"startDate": null, "endDate": null, "product": null}).$promise.then(function (result) {
-	 //    	parseGraphData(result, value);	
-		// })
-  //   }();
-
-     $scope.$watch('viewtype', function(newValue, oldValue) {
+     $scope.$watch('params', function(newValue, oldValue) {
         if (newValue){
             $scope.drawGraph = function (){
             		Enrollmentdata[signupModule]({"startDate": null, "endDate": null, "product": null}).$promise.then(function (result) {
@@ -62,7 +54,7 @@ angular.module('dashApp')
 		graphData.labels = labels;
 		graphData.datasets = [];
 		
-		if ($scope.viewtype === "DayByDay"){
+		if ($scope.params.viewtype === "DayByDay"){
 			graphData.datasets.push(dataPointsDayByDay);
 			$scope.count = { total: counter};
 		} else {
