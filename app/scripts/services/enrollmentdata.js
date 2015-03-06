@@ -41,10 +41,10 @@ angular.module('dashApp')
           },
           isArray: false
         },
-        'setups': {
+        'setup': {
           method: "GET",
           params: {
-            enrollmentController: "setups",
+            enrollmentController: "setup",
             startDate: "startDate",
             endDate: "endDate"
             // communicationType: "communicationType",

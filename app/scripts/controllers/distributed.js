@@ -1,17 +1,17 @@
 
 
 angular.module('dashApp')
-.controller('SignupCtrl',  function ($scope, Enrollmentdata) {
-    var signupModule = 'signup';
+.controller('DistributedCtrl',  function ($scope, Enrollmentdata) {
+    var distributedModule = 'distributed';
     $scope.count = { total: 0 };
 
      $scope.$watch('params', function(newValue, oldValue) {
         if (newValue){
             $scope.drawGraph = function (){
-            		Enrollmentdata[signupModule]({"startDate": null, "endDate": null, "product": null}).$promise.then(function (result) {
-            	    	parseGraphData(result);	
-            		})
-                }();
+        		Enrollmentdata[distributedModule]({"startDate": null, "endDate": null, "product": null}).$promise.then(function (result) {
+        	    	parseGraphData(result);	
+        		})
+            }();
         }
     }, true);
 	
@@ -26,9 +26,10 @@ angular.module('dashApp')
 				dataPointsDayByDay = {},
 				dataPointsCum = {},
 				counter = 0,
-				cumCounter = 0;
+				cumCounter = 0,
+				selectedYear = $scope.enrollment.year;
 			
-		signupData = data.Cohort[0][2014].graphData;
+		distributedData = data.years.selectedYear.data.GraphingData;
 		cumCounter = data.Cohort[0][2014].totals;
 		dates = Object.keys(signupData);
 

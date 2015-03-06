@@ -16,7 +16,8 @@
         "kuhl"
     ],
     "ModuleTypes": [
-        "signup"
+        "signup",
+        "distributed"
     ],
     "TimePeriods": [
         "2014",

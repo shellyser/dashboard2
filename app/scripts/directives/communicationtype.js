@@ -13,11 +13,11 @@ angular.module('dashApp')
       link: function postLink(scope, elt, attrs) {
 
         elt.on('click', function(){
-          if (scope.viewParameters.communication.indexOf(attrs.communicationTypeName) > -1){
-            scope.viewParameters.communication.splice(scope.viewParameters.communication.indexOf(attrs.communicationTypeName), 1);
+          if (scope.params.communication.indexOf(attrs.communicationTypeName) > -1){
+            scope.params.communication.splice(scope.params.communication.indexOf(attrs.communicationTypeName), 1);
           }
           else{
-            scope.viewParameters.communication.push(attrs.communicationTypeName);
+            scope.params.communication.push(attrs.communicationTypeName);
           }
           scope.$apply();
         });

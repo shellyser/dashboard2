@@ -7,26 +7,24 @@
       <span class="fa fa-file show-hide-btn export-data" title="Export data as CSV" trigger trigger-target="export-data-modal" id="export-data-btn"></span>
       <span class="show-hide-btn trigger fa fa-cog hide-large" trigger trigger-target="main-utils" trigger-closed-class="fa-cog" trigger-open-class="fa-cog" title="Settings"></span>
       <span>
-       <input
-        type="daterange"
-        ng-model="dateRange"
-        separator="-"
-        limit=""
-        format="L"
-        ranges="{'Special Range':{'startDate': '2013-09-2', 'endDate': '2013-09-5'}}"><span class="show-hide-btn fa fa-calendar" title="Date Range"></span>
-      </span></div>
+       <input type="daterange" ng-model="dateRange" separator="-" limit="" format="L" ranges="{'Special Range':{'startDate': '2013-09-2', 'endDate': '2013-09-5'}}"><span class="show-hide-btn fa fa-calendar" title="Date Range"></span>
+      </span>
+    </div>
       <div class="main-utils drawer closed" id="main-utils">
         <div class="main-utils-options-wrap">
-            <select class="main-utils-options" ng-model="params.viewtype" ng-options="view for view in enrollment.ViewTypes">
-            </select>
-            <select class="main-utils-options" ng-model="params.product" ng-options="product for product in enrollment.Products">
-            </select>
+          <select class="main-utils-options" ng-model="params.viewtype" ng-options="view for view in enrollment.ViewTypes">
+          </select>
+          <select class="main-utils-options" ng-model="params.product" ng-options="product for product in enrollment.Products">
+          </select>
         </div>
-        <ul ng-show="enrollment.CommunicationTypes.length > 1"  class="main-utils-gateways">
-            <li ng-repeat="commType in enrollment.CommunicationTypes" ng-class="{ active: (enrollment.communication).indexOf(enrollment.CommunicationTypeSlugs[$index]) > -1 }" communication-type communication-type-name={{enrollment.CommunicationTypeSlugs[$index]}}>
+        <label ng-repeat= "commType in enrollment.CommunicationTypes">
+          <input type="checkbox" name="selectedComms[]" value="{{commType}}" ng-checked="params.commSelection.indexOf(commType) > -1" ng-click="toggleCommSelection(commType)">{{commType}}
+        </label>
+        <!-- <ul ng-show="enrollment.CommunicationTypes.length > 1"  class="main-utils-gateways">
+            <li ng-repeat="commType in enrollment.CommunicationTypes" ng-class="{ active: (params.communication).indexOf(enrollment.CommunicationTypeSlugs[$index]) > -1 }" communication-type communication-type-name={{enrollment.CommunicationTypeSlugs[$index]}}>
                 <span class="gateway">{{ commType | capitalize }}</span>
             </li>
-        </ul>
+        </ul> -->
     </div>
 <!--     <div id="date-options" class="date-options-drawer drawer closed">
       <div class="date-options-section" id="date-range-wrap">
@@ -65,8 +63,11 @@
     <ul class="modules">
         <!-- <li ng-repeat="module in enrollment.ModuleTypes" ng-include src=" ' views/enrollment/module.html ' " class="module" module id="{{ module }}">
         </li> -->
-        <li ng-repeat="module in enrollment.ModuleTypes" ng-include src=" ' views/enrollment/signup.html ' " ng-controller="SignupCtrl" class="module" module id="{{ module }}">
-        </li>
+       <!--  <li ng-repeat="module in enrollment.ModuleTypes" ng-include src=" ' views/enrollment/{module}.html ' " ng-controller="SignupCtrl" class="module" module id="{{ module }}">
+        </li> -->
+        <li ng-include src=" ' views/enrollment/signup.html ' " ng-controller="SignupCtrl" class="module" module id="signup"></li>
+        <!-- <li ng-include src=" ' views/enrollment/distributed.html ' " ng-controller="DistributedCtrl" class="module" module id="distributed"></li> -->
+        <li ng-include src=" ' views/enrollment/setup.html ' " ng-controller="SetupCtrl" class="module" module id="setup"></li>
     </ul>
   </div>
 </div>
