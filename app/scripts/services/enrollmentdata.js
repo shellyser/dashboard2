@@ -9,6 +9,7 @@ angular.module('dashApp')
         endDate: "@endDate",
         communicationType: "@communicationType",
         product: "@product",
+        device: "@device"
         
       },
       {
@@ -68,8 +69,8 @@ angular.module('dashApp')
           params: {
             enrollmentController: "online",
             startDate: "startDate",
-            endDate: "endDate"
-            // communicationType: "communicationType",
+            endDate: "endDate",
+            device: "device",
             // product: "product"
           },
           isArray: false

@@ -1,5 +1,5 @@
 angular.module('dashApp')
-.directive('signupgraph', function () {
+.directive('onlinegraph', function () {
 	return {
 		restrict: 'A',
 		link: function postLink(scope, elem, attrs) {

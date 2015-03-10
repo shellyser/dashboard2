@@ -38,21 +38,26 @@ angular.module('dashApp')
 	$scope.params.product = $scope.enrollment.Products[0];
 	$scope.radiobutton = $scope.enrollment.ViewForms[0];
 	// $scope.params.commSelection = [];
-	$scope.params.commSelection = communication;
+	$scope.params.commTypeSelected = [];
 
-	$scope.toggleCommSelection = function toggleCommSelection(commType) {
-	    var idx = $scope.params.commSelection.indexOf(commType);
+	var updateSelected = function(action, communicationType) {
+	  if (action === 'add' && $scope.params.commTypeSelected.indexOf(communicationType) === -1) {
+	    $scope.params.commTypeSelected.push(communicationType);
+	  }
+	  if (action === 'remove' && $scope.params.commTypeSelected.indexOf(communicationType) !== -1) {
+	    $scope.params.commTypeSelected.splice($scope.params.commTypeSelected.indexOf(communicationType), 1);
+	  }
+	};
 
-	    // is currently selected
-	    if (idx > -1) {
-	      $scope.params.commSelection.splice(idx, 1);
-	    }
+	$scope.updateSelection = function($event, communicationType) {
+	  var checkbox = $event.target;
+	  var action = (checkbox.checked ? 'add' : 'remove');
+	  updateSelected(action, communicationType);
+	};
 
-	    // is newly selected
-	    else {
-	      $scope.params.commSelection.push(commType);
-	    }
-	  };
+	$scope.isSelected = function(communicationType) {
+  	return $scope.params.commTypeSelected.indexOf(communicationType) >= 0;
+	};
 
 	if ($scope.enrollment.Products.indexOf('Customer') < 0 && $scope.enrollment.Products.indexOf('customer') < 0){
 		$scope.enrollment.Products.push('Customer');

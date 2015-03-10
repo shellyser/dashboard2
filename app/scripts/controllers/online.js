@@ -1,46 +1,26 @@
 
 
 angular.module('dashApp')
-.controller('SetupCtrl',  function ($scope, Enrollmentdata) {
-    var setupModule = 'setup';
+.controller('OnlineCtrl',  function ($scope, Enrollmentdata) {
+    var onlineModule = 'online';
     $scope.count = { total: 0 };
-    $scope.devices = ['thermostats', 'modlets'];
-    $scope.deviceSelected = ['thermostats', 'modlets'];
-
-    var updateSelected = function(action, deviceType) {
-	  if (action === 'add' && $scope.deviceSelected.indexOf(deviceType) === -1) {
-	    $scope.deviceSelected.push(deviceType);
-	  }
-	  if (action === 'remove' && $scope.deviceSelected.indexOf(deviceType) !== -1) {
-	    $scope.deviceSelected.splice($scope.deviceSelected.indexOf(deviceType), 1);
-	  }
-	};
-
-	$scope.updateDeviceSelection = function($event, deviceType) {
-	  var checkbox = $event.target;
-	  var action = (checkbox.checked ? 'add' : 'remove');
-	  updateSelected(action, deviceType);
-	};
-
-	$scope.isDeviceSelected = function(deviceType) {
-  	return $scope.deviceSelected.indexOf(deviceType) >= 0;
-	};
-
+    $scope.devices = ["ACs", "CallableLoad(KW)"];
+    $scope.deviceChosen = $scope.devices[0];
 
      $scope.$watch('params', function(newValue, oldValue) {
              if (newValue){
                  $scope.drawGraph = function (){
-             		Enrollmentdata[setupModule]({"startDate": null, "endDate": null, "product": null}).$promise.then(function (result) {
+             		Enrollmentdata[onlineModule]({"startDate": null, "endDate": null, "product": null}).$promise.then(function (result) {
              	    	parseGraphData(result);	
              		})
                  }();
              }
      }, true);
 
-     $scope.$watch('deviceSelected', function(newValue, oldValue) {
+     $scope.$watch('deviceChosen', function(newValue, oldValue) {
              if (newValue){
                  $scope.drawGraph = function (){
-             		Enrollmentdata[setupModule]({"device": null}).$promise.then(function (result) {
+             		Enrollmentdata[onlineModule]({"device": null}).$promise.then(function (result) {
              	    	parseGraphData(result);	
              		})
                  }();
@@ -53,7 +33,7 @@ angular.module('dashApp')
 			labels = [],
 			pointsDayByDay = [],
 			pointsCum = [],
-			setupData = {},
+			onlineData = {},
 			graphData = {},
 			dataPointsDayByDay = {},
 			dataPointsCum = {},
@@ -66,28 +46,28 @@ angular.module('dashApp')
 			// noData();
 		}
 		else{
-			//add selected communication types to setupData and set their values
+			//add selected communication types to onlineData and set their values
 			for (var i in params.commTypeSelected){
 				var list = params.commTypeSelected[i].toLowerCase();
-				setupData[list] = data.years[selectedYear].data.GraphingData[list];
+				onlineData[list] = data.years[selectedYear].data.GraphingData[list];
 			}
 
-			//track # of undefined lists within setupData
+			//track # of undefined lists within onlineData
 			var undefinedListsCount = 0,
 			definedlistsCount = 0;
-			for (var setupList in setupData){
-				if (!setupData[setupList]){
+			for (var onlineList in onlineData){
+				if (!onlineData[onlineList]){
 					undefinedListsCount++;
 				}
 				else{
 					if(definedlistsCount === 0){
-						dates = Object.keys(setupData[setupList].data);
+						dates = Object.keys(onlineData[onlineList].data);
 					}
 					definedlistsCount++;
 				}
 			}
 
-			// make sure setupData has at least one defined communication list
+			// make sure onlineData has at least one defined communication list
 			if (definedlistsCount > 0) {
 				numberOfPoints = dates.length;
 				//   init daybyday view graphPoints array with 0s
@@ -95,13 +75,13 @@ angular.module('dashApp')
 				//   init cumulative view graphPoints array with cumulativeTotal
 				pointsCum = Array.apply(null, new Array(numberOfPoints)).map(Number.prototype.valueOf,0);
 
-				for (var setupList in setupData){
-					if (setupData[setupList] !== undefined){
+				for (var onlineList in onlineData){
+					if (onlineData[onlineList] !== undefined){
 						var eltCounter = 0;
-						cumulativeCounter += setupData[setupList].cumulativeTotal;
-						for (var elt in setupData[setupList].data){
+						cumulativeCounter += onlineData[onlineList].cumulativeTotal;
+						for (var elt in onlineData[onlineList].data){
 							// add this value to the y-value of the relevant point
-							var value = setupData[setupList].data[elt];
+							var value = onlineData[onlineList].data[elt];
 							cumulativeCounter += value;
 							counter += value;
 							pointsDayByDay[eltCounter] += value;

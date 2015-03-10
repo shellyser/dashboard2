@@ -5,29 +5,29 @@ angular.module('dashApp')
     var signupModule = 'signup';
     $scope.count = { total: 0 };
 
-     $scope.$watch('params', function(newValue, oldValue) {
+	$scope.$watch('params', function(newValue, oldValue) {
         if (newValue){
             $scope.drawGraph = function (){
-            		Enrollmentdata[signupModule]({"startDate": null, "endDate": null, "product": null}).$promise.then(function (result) {
-            	    	parseGraphData(result);	
-            		})
-                }();
+        		Enrollmentdata[signupModule]({"startDate": null, "endDate": null, "product": null}).$promise.then(function (result) {
+        	    	parseGraphData(result);	
+        		})
+            }();
         }
     }, true);
 	
 	function parseGraphData(data){
-		var params = $scope.enrollment,
+		var params = $scope.params,
 			dates = [],
-				labels = [],
-				pointsDayByDay = [],
-				pointsCum = [],
-				signupData = {},
-				graphData = {},
-				dataPointsDayByDay = {},
-				dataPointsCum = {},
-				counter = 0,
-				cumCounter = 0;
-			
+			labels = [],
+			pointsDayByDay = [],
+			pointsCum = [],
+			signupData = {},
+			graphData = {},
+			dataPointsDayByDay = {},
+			dataPointsCum = {},
+			counter = 0,
+			cumCounter = 0;
+		
 		signupData = data.Cohort[0][2014].graphData;
 		cumCounter = data.Cohort[0][2014].totals;
 		dates = Object.keys(signupData);
@@ -40,7 +40,7 @@ angular.module('dashApp')
 			pointsDayByDay.push(signupData[key]);
 			counter = counter + signupData[key];
 			cumCounter = cumCounter + signupData[key];
-			pointsCum.push(signupData[key]+ cumCounter);
+			pointsCum.push(cumCounter);
 		}
 
 		dataPointsDayByDay = {
