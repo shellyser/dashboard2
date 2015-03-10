@@ -37,8 +37,11 @@ angular.module('dashApp')
 	$scope.params.viewtype = $scope.enrollment.ViewTypes[0];
 	$scope.params.product = $scope.enrollment.Products[0];
 	$scope.radiobutton = $scope.enrollment.ViewForms[0];
-	// $scope.params.commSelection = [];
 	$scope.params.commTypeSelected = [];
+
+	for (var i in communication){
+		$scope.params.commTypeSelected.push(communication[i]);
+	}
 
 	var updateSelected = function(action, communicationType) {
 	  if (action === 'add' && $scope.params.commTypeSelected.indexOf(communicationType) === -1) {

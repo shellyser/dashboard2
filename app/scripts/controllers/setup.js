@@ -6,6 +6,7 @@ angular.module('dashApp')
     $scope.count = { total: 0 };
     $scope.devices = ['thermostats', 'modlets'];
     $scope.deviceSelected = ['thermostats', 'modlets'];
+    $scope.noData = false;
 
     var updateSelected = function(action, deviceType) {
 	  if (action === 'add' && $scope.deviceSelected.indexOf(deviceType) === -1) {

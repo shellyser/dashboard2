@@ -19,10 +19,10 @@
     </div>
     <div class="module-loading"><span class="fa fa-circle-o-notch fa-spin loading-icon"></span></div>
     <div class="module-grapharea">
-        <div class="graph-wrap" ng-switch on="radiobutton" style="width:100%; height: 100%">
+        <div class="graph-wrap" ng-hide="noData" ng-switch on="radiobutton" style="width:100%; height: 100%">
           <canvas id="graph-setup" setupgraph graph-content="{{module}}" graph-num="2" ng-switch-when="Graph"></canvas>   
          <!--  <div id="map-canvas" map map-content="{{module}}" map-num="{{$index + 1}}"  ng-switch-when="Map"></div>  -->
         </div>
-        <div class="module-no-data">No data</div>
+        <div class="module-no-data" ng-show="noData">No data</div>
     </div>
 </div>

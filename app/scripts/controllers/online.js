@@ -5,7 +5,9 @@ angular.module('dashApp')
     var onlineModule = 'online';
     $scope.count = { total: 0 };
     $scope.devices = ["ACs", "CallableLoad(KW)"];
-    $scope.deviceChosen = $scope.devices[0];
+    $scope.onlineparams = {};
+    $scope.onlineparams.deviceChosen = $scope.devices[0];
+    $scope.noData = false;
 
      $scope.$watch('params', function(newValue, oldValue) {
              if (newValue){
@@ -17,11 +19,17 @@ angular.module('dashApp')
              }
      }, true);
 
-     $scope.$watch('deviceChosen', function(newValue, oldValue) {
+     $scope.$watch('onlineparams', function(newValue, oldValue) {
              if (newValue){
                  $scope.drawGraph = function (){
              		Enrollmentdata[onlineModule]({"device": null}).$promise.then(function (result) {
-             	    	parseGraphData(result);	
+             	    	if ($scope.params.commTypeSelected.length > 0){
+             	    		parseGraphData(result);
+             	    		$scope.noData = false;
+             	    	}
+             	    	else{
+             	    		$scope.noData = true;
+             	    	}	
              		})
                  }();
              }
@@ -43,7 +51,7 @@ angular.module('dashApp')
 			selectedYear = $scope.year;
 			
 		if (params.commTypeSelected.length === 0){
-			// noData();
+			$scope.noData = true;
 		}
 		else{
 			//add selected communication types to onlineData and set their values
@@ -110,6 +118,7 @@ angular.module('dashApp')
 				graphData.labels = labels;
 				graphData.datasets = [];
 				
+				//add to scope graph data depending on the viewtype
 				if ($scope.params.viewtype === "DayByDay"){
 					graphData.datasets.push(dataPointsDayByDay);
 					$scope.count = { total: counter};
@@ -118,13 +127,12 @@ angular.module('dashApp')
 					$scope.count = { total: cumulativeCounter};	
 				}
 				$scope.graph = graphData;
+				$scope.noData = false;
 			}
 		}
 	}
-	function createGraphDatasets(){
 
-	}
-	// no data for this module -- don't draw a graph.
+	//no data for this module -- don't draw a graph.
 	// function noData(){
 	// 	elt.parent().hide();
 	// 	showGraphArea(false);

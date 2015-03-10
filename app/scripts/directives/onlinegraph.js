@@ -13,14 +13,12 @@ angular.module('dashApp')
 			// }
 			function populateGraph(){
 				var canvas = elem[0];
-				var canvasId = canvas.id;
+				var canvasId = elem.attr("id");
 				animate = ANIMATE_GRAPH,
 				allOptionsUnchecked = false,
-				width = $('canvas')
-				.closest('.module')
-				.css('width');
+				width = elem.closest('.module').css('width');
 				//set canvas to width of parent
-				$('canvas').attr("id", canvasId).css('width', width);  
+				elem.attr("id", canvasId).css('width',width); 
 
 				//eliminates any existing instance of Chart
 				for (var instance in Chart.instances){
@@ -41,7 +39,7 @@ angular.module('dashApp')
 				total = 0,
 				lineColor,
 				fillColor,
-				color = $('canvas').closest('.module').find('.module-header').css('color');
+				color = elem.closest('.module').find('.module-header').css('color');
 
 				// graph colors are based on the color of the bar at the top of the module
 				color = color.replace('rgb', 'rgba');
