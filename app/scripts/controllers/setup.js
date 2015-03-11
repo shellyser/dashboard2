@@ -1,5 +1,3 @@
-
-
 angular.module('dashApp')
 .controller('SetupCtrl',  function ($scope, Enrollmentdata) {
     var setupModule = 'setup';
@@ -31,18 +29,26 @@ angular.module('dashApp')
      $scope.$watch('params', function(newValue, oldValue) {
              if (newValue){
                  $scope.drawGraph = function (){
-             		Enrollmentdata[setupModule]({"startDate": null, "endDate": null, "product": null}).$promise.then(function (result) {
-             	    	parseGraphData(result);	
-             		})
-                 }();
-             }
+                 	if ($scope.product === "AC"){
+                 		for (var i in $scope.device){
+             				Enrollmentdata[setupModule]({"startDate": null, "endDate": null, "product": null, "device": null}).$promise.then(function (result) {
+	       			    		parseGraphData(result);	
+	       			    	})
+                 		}
+                 	} else {
+       				Enrollmentdata[setupModule]({"startDate": null, "endDate": null, "product": null, "device": null}).$promise.then(function (result) {
+   			    		parseGraphData(result);	
+   			    	})
+                 	}
+		}();
+	 }
      }, true);
 
      $scope.$watch('deviceSelected', function(newValue, oldValue) {
              if (newValue){
                  $scope.drawGraph = function (){
              		Enrollmentdata[setupModule]({"device": null}).$promise.then(function (result) {
-             	    	parseGraphData(result);	
+             	    		parseGraphData(result);	
              		})
                  }();
              }
