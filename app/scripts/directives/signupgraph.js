@@ -80,7 +80,7 @@ angular.module('dashApp')
 				var calcNewMin = false,
 					step = 0,
 				options = {
-					scaleOverride: false,
+					scaleOverride: true,
 					scaleSteps: 10,
 					scaleFontFamily: 'PT Sans, sans-serif',
 					scaleFontStyle: 'bold',

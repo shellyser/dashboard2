@@ -1,12 +1,11 @@
 {
     "years": {
         "2014": {
-            "total": 100,
             "cumulativeTotal": 1200,
             "data": {
                 "MappingData": {
                     "usb": {
-                        "total": 0,
+                        "cumulativeTotal": 100,
                         "data": {
                             "10001": {
                                 "latitude": 40.752,
@@ -53,7 +52,7 @@
                         }
                     },
                     "ethernet": {
-                        "total": 0,
+                        "cumulativeTotal": 200,
                         "data": {
                             "10001": {
                                 "latitude": 40.752,
@@ -100,7 +99,7 @@
                         }
                     },
                     "wifi": {
-                        "total": 0,
+                        "cumulativetotal": 200,
                         "data": {
                             "10001": {
                                 "latitude": 40.752,
@@ -149,7 +148,6 @@
                 },
                 "GraphingData": {
                     "usb": {
-                        "total": 150,
                         "cumulativeTotal": 1250,
                         "data": {
                             "06/01/2014": 70,
@@ -162,7 +160,6 @@
                         }
                     },
                     "ethernet": {
-                        "total": 200,
                         "cumulativeTotal": 1040,
                         "data": {
                             "06/01/2014": 70,
@@ -176,7 +173,6 @@
                         }
                     },
                     "wifi": {
-                        "total": 350,
                         "cumulativeTotal": 500,
                         "data": {
                             "06/01/2014": 70,

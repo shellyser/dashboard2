@@ -9,15 +9,11 @@
         "AC",
         "Customer"
     ],
-    "CommunicationTypeSlugs": [
-        "ethernet",
-        "usb",
-        "wifi",
-        "kuhl"
-    ],
     "ModuleTypes": [
         "signup",
-        "distributed"
+        "distributed",
+        "setup",
+        "online"
     ],
     "TimePeriods": [
         "2014",
@@ -30,17 +26,5 @@
     "ViewForms": [
         "Graph",
         "Map"
-    ],
-    "Defaults": {
-        "View": "DayByDay",
-        "Product": "AC",
-        "DateSpan": "7",
-        "Communication": [
-            "ethernet",
-            "usb",
-            "wifi",
-            "kuhl"
-        ],
-        "ViewType": "Graph"
-    }
+    ]
 }

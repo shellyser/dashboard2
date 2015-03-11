@@ -9,7 +9,9 @@ angular.module('dashApp')
         endDate: "@endDate",
         communicationType: "@communicationType",
         product: "@product",
-        device: "@device"
+        device: "@device",
+        delivery: "@delivery",
+        status: "@status"
         
       },
       {
@@ -27,7 +29,6 @@ angular.module('dashApp')
             enrollmentController: "signup",
             startDate: "startDate",
             endDate: "endDate",
-            // communicationType: "communicationType",
             product: "product"
           }
         },
@@ -36,9 +37,10 @@ angular.module('dashApp')
           params: {
             enrollmentController: "distributed",
             startDate: "startDate",
-            endDate: "endDate"
-            // communicationType: "communicationType",
-            // product: "product"
+            endDate: "endDate",
+            delivery: "delivery",
+            product: "product",
+            status: "status"
           },
           isArray: false
         },
@@ -47,20 +49,9 @@ angular.module('dashApp')
           params: {
             enrollmentController: "setup",
             startDate: "startDate",
-            endDate: "endDate"
-            // communicationType: "communicationType",
-            // product: "product"
-          },
-          isArray: false
-        },
-        'optout': {
-          method: "GET",
-          params: {
-            enrollmentController: "optout",
-            startDate: "startDate",
-            endDate: "endDate"
-            // communicationType: "communicationType",
-            // product: "product"
+            endDate: "endDate",
+            product: "product",
+            device: "device"
           },
           isArray: false
         },
@@ -71,7 +62,7 @@ angular.module('dashApp')
             startDate: "startDate",
             endDate: "endDate",
             device: "device",
-            // product: "product"
+            product: "product"
           },
           isArray: false
         }

@@ -5,53 +5,67 @@ angular.module('dashApp')
     $scope.devices = ['thermostats', 'modlets'];
     $scope.deviceSelected = ['thermostats', 'modlets'];
     $scope.noData = false;
+	var graphData = {},
+		counter = 0,
+		cumulativeCounter = 0;
+
 
     var updateSelected = function(action, deviceType) {
-	  if (action === 'add' && $scope.deviceSelected.indexOf(deviceType) === -1) {
-	    $scope.deviceSelected.push(deviceType);
-	  }
-	  if (action === 'remove' && $scope.deviceSelected.indexOf(deviceType) !== -1) {
-	    $scope.deviceSelected.splice($scope.deviceSelected.indexOf(deviceType), 1);
-	  }
+		if (action === 'add' && $scope.deviceSelected.indexOf(deviceType) === -1) {
+			$scope.deviceSelected.push(deviceType);
+		}
+		if (action === 'remove' && $scope.deviceSelected.indexOf(deviceType) !== -1) {
+			$scope.deviceSelected.splice($scope.deviceSelected.indexOf(deviceType), 1);
+		}
 	};
 
 	$scope.updateDeviceSelection = function($event, deviceType) {
-	  var checkbox = $event.target;
-	  var action = (checkbox.checked ? 'add' : 'remove');
-	  updateSelected(action, deviceType);
+		var checkbox = $event.target;
+		var action = (checkbox.checked ? 'add' : 'remove');
+		updateSelected(action, deviceType);
 	};
 
 	$scope.isDeviceSelected = function(deviceType) {
-  	return $scope.deviceSelected.indexOf(deviceType) >= 0;
+  		return $scope.deviceSelected.indexOf(deviceType) >= 0;
 	};
 
 
      $scope.$watch('params', function(newValue, oldValue) {
-             if (newValue){
-                 $scope.drawGraph = function (){
-                 	if ($scope.product === "AC"){
-                 		for (var i in $scope.device){
-             				Enrollmentdata[setupModule]({"startDate": null, "endDate": null, "product": null, "device": null}).$promise.then(function (result) {
-	       			    		parseGraphData(result);	
-	       			    	})
-                 		}
-                 	} else {
-       				Enrollmentdata[setupModule]({"startDate": null, "endDate": null, "product": null, "device": null}).$promise.then(function (result) {
-   			    		parseGraphData(result);	
-   			    	})
-                 	}
-		}();
-	 }
-     }, true);
+		if (newValue){
+			$scope.drawGraph = function (){
+				graphData = {};
+		 		graphData.datasets = [];
+		 		counter = 0;
+		 		cumulativeCounter = 0;
+			 	if ($scope.params.product === "AC"){
+			 		for (var i in $scope.deviceSelected){
+						Enrollmentdata[setupModule]({"startDate": null, "endDate": null, "product": null, "device": null}).$promise.then(function (result) {
+				    		parseGraphData(result);	
+				    	})
+			 		}
+		 		} else {
+					Enrollmentdata[setupModule]({"startDate": null, "endDate": null, "product": null}).$promise.then(function (result) {
+			    		parseGraphData(result);	
+			    	})
+			 	}
+			}();
+	 	}
+	}, true);
 
      $scope.$watch('deviceSelected', function(newValue, oldValue) {
-             if (newValue){
-                 $scope.drawGraph = function (){
-             		Enrollmentdata[setupModule]({"device": null}).$promise.then(function (result) {
-             	    		parseGraphData(result);	
-             		})
-                 }();
-             }
+		if (newValue){
+			$scope.drawGraph = function (){
+				graphData = {};
+				graphData.datasets = [];
+				counter = 0;
+				cumulativeCounter = 0;
+		 		for (var i in $scope.deviceSelected){
+					Enrollmentdata[setupModule]({"startDate": null, "endDate": null, "product": null, "device": null}).$promise.then(function (result) {
+			    		parseGraphData(result);	
+			    	})
+			    }
+			}();
+		}
      }, true);
 	
 	function parseGraphData(data){
@@ -61,12 +75,11 @@ angular.module('dashApp')
 			pointsDayByDay = [],
 			pointsCum = [],
 			setupData = {},
-			graphData = {},
 			dataPointsDayByDay = {},
 			dataPointsCum = {},
-			counter = 0,
-			cumulativeCounter = 0,
-			pointNumber,
+			counterArray = [],
+			cumCounterArray = [],
+			// pointNumber,
 			selectedYear = $scope.year;
 			
 		if (params.commTypeSelected.length === 0){
@@ -135,7 +148,7 @@ angular.module('dashApp')
 				}
 
 				graphData.labels = labels;
-				graphData.datasets = [];
+				// graphData.datasets = [];
 				
 				if ($scope.params.viewtype === "DayByDay"){
 					graphData.datasets.push(dataPointsDayByDay);
@@ -148,9 +161,7 @@ angular.module('dashApp')
 			}
 		}
 	}
-	function createGraphDatasets(){
 
-	}
 	// no data for this module -- don't draw a graph.
 	// function noData(){
 	// 	elt.parent().hide();

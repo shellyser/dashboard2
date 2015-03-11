@@ -26,10 +26,11 @@ angular.module('dashApp')
 			dataPointsDayByDay = {},
 			dataPointsCum = {},
 			counter = 0,
-			cumCounter = 0;
+			cumCounter = 0,
+			selectedYear = $scope.year;
 		
-		signupData = data.Cohort[0][2014].graphData;
-		cumCounter = data.Cohort[0][2014].totals;
+		signupData = data.years[selectedYear].data.GraphingData;
+		cumCounter = data.years[selectedYear].cumulativeTotal;
 		dates = Object.keys(signupData);
 
 		for (var i in dates){

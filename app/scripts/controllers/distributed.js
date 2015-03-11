@@ -31,7 +31,7 @@ angular.module('dashApp')
      $scope.$watch('params', function(newValue, oldValue) {
              if (newValue){
                  $scope.drawGraph = function (){
-             		Enrollmentdata[distributedModule]({"startDate": null, "endDate": null, "product": null}).$promise.then(function (result) {
+             		Enrollmentdata[distributedModule]({"startDate": null, "endDate": null, "product": null, "delivery": null}).$promise.then(function (result) {
              	    	parseGraphData(result);	
              		})
                  }();
