@@ -9,7 +9,7 @@
  * Main module of the application.
  */
 
-angular.module('dashApp', ['FormErrors', 'ngBootstrap', 'ui.router', 'ngResource', 'ui.bootstrap'])
+angular.module('dashApp', ['FormErrors', 'ui.router', 'ngResource', 'ui.bootstrap', 'ngBootstrap'])
 
 .config(function($stateProvider, $urlRouterProvider){
     // $locationProvider.html5Mode(true);

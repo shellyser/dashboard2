@@ -58,8 +58,8 @@ angular.module('dashApp')
 					newLineColor = newFillColor.replace('0.3', '1'),
 					pointSetCheck = elem.closest('.module-body')
 					.find('.module-view-options-checkbox:eq(' + pointSet + ')');
-						data: points[pointSet],
 					dataForGraphing.push({
+						data: points[pointSet],
 						fillColor: newFillColor,
 						strokeColor: newLineColor,// 'rgba(0, 0, 0, 0)',
 						pointStrokeColor: newLineColor,

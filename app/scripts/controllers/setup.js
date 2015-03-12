@@ -5,9 +5,9 @@ angular.module('dashApp')
     $scope.devices = ['thermostats', 'modlets'];
     $scope.deviceSelected = ['thermostats', 'modlets'];
     $scope.noData = false;
-	var graphData = {},
-		counter = 0,
-		cumulativeCounter = 0;
+	// var graphData = {},
+		// counter = 0,
+		// cumulativeCounter = 0;
 
 
     var updateSelected = function(action, deviceType) {
@@ -33,10 +33,10 @@ angular.module('dashApp')
      $scope.$watch('params', function(newValue, oldValue) {
 		if (newValue){
 			$scope.drawGraph = function (){
-				graphData = {};
+				var graphData = {};
 		 		graphData.datasets = [];
-		 		counter = 0;
-		 		cumulativeCounter = 0;
+		 		var counter = 0;
+		 		var cumulativeCounter = 0;
 			 	if ($scope.params.product === "AC"){
 			 		for (var i in $scope.deviceSelected){
 						Enrollmentdata[setupModule]({"startDate": null, "endDate": null, "product": null, "device": null}).$promise.then(function (result) {
@@ -55,10 +55,10 @@ angular.module('dashApp')
      $scope.$watch('deviceSelected', function(newValue, oldValue) {
 		if (newValue){
 			$scope.drawGraph = function (){
-				graphData = {};
+				var graphData = {};
 				graphData.datasets = [];
-				counter = 0;
-				cumulativeCounter = 0;
+				var counter = 0;
+				var cumulativeCounter = 0;
 		 		for (var i in $scope.deviceSelected){
 					Enrollmentdata[setupModule]({"startDate": null, "endDate": null, "product": null, "device": null}).$promise.then(function (result) {
 			    		parseGraphData(result);	
