@@ -9,7 +9,7 @@
  * Main module of the application.
  */
 
-angular.module('dashApp', ['FormErrors', 'ui.router', 'ngResource', 'ui.bootstrap', 'ngBootstrap'])
+angular.module('dashApp', ['FormErrors', 'ui.router', 'ngResource', 'ui.bootstrap'])
 
 .config(function($stateProvider, $urlRouterProvider){
     // $locationProvider.html5Mode(true);
@@ -53,6 +53,17 @@ angular.module('dashApp', ['FormErrors', 'ui.router', 'ngResource', 'ui.bootstra
             }
         }           
     })
+
+    // .state('dashboard.enrollment.setup', {
+    //     url: 'setup',
+    //     views: {
+    //         'setup':{
+    //             templateUrl: '/views/enrollment/setup.html',
+    //             controller: 'SetupCtrl'
+    //         }
+    //     }
+    // })
+
     .state('dashboard.drevents', {
         url: 'drevents',
         views: {

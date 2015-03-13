@@ -10,8 +10,11 @@
  */
 angular.module('dashApp')
 .controller('EnrollmentCtrl',  function ($scope, enrollmentData, user, $rootScope, $cacheFactory) {
+	var cache = $cacheFactory('enrollmentCache');
 
-	var cache = $cacheFactory(enrollmentData);
+	if (cache.get('params') === undefined) {
+		
+	
 	var date = 7;
 
 	$scope.enrollment = enrollmentData;
@@ -24,13 +27,14 @@ angular.module('dashApp')
 	date = enrollmentData.DateSpan;
 	}
 
-	// var endDate = moment().endOf('day').subtract(1, 'days').format("MM/DD/YYYY"),
-	// 	   startDate = moment().startOf('day').subtract(7, 'days').format("MM/DD/YYYY");
+	var endDate = moment().endOf('day').subtract(1, 'days').format("MM/DD/YYYY"),
+		   startDate = moment().startOf('day').subtract(7, 'days').format("MM/DD/YYYY");
 	
-	// $scope.params = {
-	// 	endDate:  endDate,
-	// 	startDate: startDate
-	// };
+	$scope.dates = {};
+	$scope.dates = {
+		endDate:  endDate,
+		startDate: startDate,
+	};
 
 	var communication = $scope.enrollment.CommunicationTypes;
 	$scope.year = $scope.enrollment.TimePeriods[0];
@@ -39,6 +43,7 @@ angular.module('dashApp')
 	$scope.params.product = $scope.enrollment.Products[0];
 	$scope.radiobutton = $scope.enrollment.ViewForms[0];
 	$scope.params.commTypeSelected = [];
+	$scope.params.dates = $scope.dates;
 
 	for (var i in communication){
 		$scope.params.commTypeSelected.push(communication[i]);
@@ -65,26 +70,15 @@ angular.module('dashApp')
 
 	if ($scope.enrollment.Products.indexOf('Customer') < 0 && $scope.enrollment.Products.indexOf('customer') < 0){
 		$scope.enrollment.Products.push('Customer');
-  }
+	 }
   
 	$scope.drawGraph = {};
-	$scope.dates = {};
-	$scope.dates.dateRange = {
-		endDate:  moment().endOf('day').subtract(1, 'days'),
-		startDate:  moment().startOf('day').subtract(7, 'days'),
-		minDate: moment('2014 01 01', 'YYYY MM DD'),
-		maxDate: moment().subtract(1, 'days')
-	}
 
-	$scope.modulePath = function(){
-			$scope.moduleUrl = 'views/enrollment/' + module + '.html';
-			$scope.moduleControllerName = module + 'Ctrl';
-	}
+}
+else{
+	cache.put('params', $scope.params);
+}
 
-	$scope.$on('dates', function (events, args){
-		console.log(args, events); 
-	})
 
-	// $scope.params.dates = $scope.dateRange;
 
 });

@@ -59,7 +59,7 @@ angular.module('dashApp')
 					pointSetCheck = elem.closest('.module-body')
 					.find('.module-view-options-checkbox:eq(' + pointSet + ')');
 					dataForGraphing.push({
-						data: points[pointSet],
+						data: points[pointSet].data,
 						fillColor: newFillColor,
 						strokeColor: newLineColor,// 'rgba(0, 0, 0, 0)',
 						pointStrokeColor: newLineColor,
@@ -168,9 +168,9 @@ angular.module('dashApp')
 					options.scaleStartValue = graphDims.min;
 					options.scaleStepWidth = graphDims.step;
 				}
-
+				scope.graph = graphData;
 				var ctx = canvas.getContext("2d");
-				var newGraph = new Chart(ctx).Line(scope.graph, options);
+				var newGraph = new Chart(ctx).Line(graphData, options);
 				showGraphArea();
 			}
 
