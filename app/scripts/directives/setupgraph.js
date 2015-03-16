@@ -1,16 +1,15 @@
 angular.module('dashApp')
-.directive('setupgraph', function () {
+.directive('setupgraph', function ($timeout) {
 	return {
 		restrict: 'A',
 		link: function postLink(scope, elem, attrs) {
-			// function checkData(){
-			// 	if (jQuery.isEmptyObject(scope.graph)){
-			// 		noData();
-			// 	}
-			// 	else{
-			// 		populateGraph();
-			// 	}
-			// }
+	
+			scope.$watch('graph', function() {
+				$timeout(function() {
+		    		populateGraph();
+		    	})
+			}, true);
+
 			function populateGraph(){
 				var canvas = elem[0];
 				var canvasId = elem.attr("id");
@@ -67,18 +66,18 @@ angular.module('dashApp')
 					});
 					pointSetCheck.find('label').css('color', newLineColor);
 					// construct total and max of data
-					for (i in points[pointSet]){
+					for (i in points[pointSet].data){
 						if ((parseInt(pointSet) === 0) && (parseInt(i) === 0)){
-							min = points[pointSet][i];
+							min = points[pointSet].data[i];
 						}
-						if (points[pointSet][i] === 0){
+						if (points[pointSet].data[i] === 0){
 							hasZeroInData = true;
 						}
-						if (points[pointSet][i] > max){
-							max = points[pointSet][i];
+						if (points[pointSet].data[i] > max){
+							max = points[pointSet].data[i];
 						}
-						else if (points[pointSet][i] < min){
-							min = points[pointSet][i];
+						else if (points[pointSet].data[i] < min){
+							min = points[pointSet].data[i];
 						}
 					}
 					// check if the difference between the datasets is significant
@@ -173,12 +172,6 @@ angular.module('dashApp')
 				var newGraph = new Chart(ctx).Line(graphData, options);
 				showGraphArea();
 			}
-
-			scope.$watch('graph', function(newValue, oldValue) {
-	    		if (newValue)
-	    		// newGraph.Line.destroy();
-	    		populateGraph();
-			}, true);
 
 			function calcMinAndStep(min, max, step){
 				var solution = {

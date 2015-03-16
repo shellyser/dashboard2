@@ -10,10 +10,12 @@
     <div class="module-controls">
         <h2 class="module-body-stat">{{ count.total }}</h2>
         <div ng-show="params.product === 'AC' " class="module-view-options">
-            <div class="module-view-options-checkbox">
-                <label ng-repeat="device in devices">
-                    <input type="checkbox" class="checkbox-option" ng-checked="isDeviceSelected(device)" ng-click="updateDeviceSelection($event, device)" id="{{device}}" attr-dataset="{{device}}">{{device}}
-                </label>
+            <div class="module-view-options-checkboxes">
+                <div class="module-view-options-checkbox">
+                    <label ng-repeat="device in devices">
+                        <input type="checkbox" class="checkbox-option" ng-checked="isDeviceSelected(device)" ng-click="updateDeviceSelection($event, device)" id="{{device}}" attr-dataset="{{device}}">{{device}}
+                    </label>
+                </div>
             </div>
         </div>
     </div>

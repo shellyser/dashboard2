@@ -1,13 +1,13 @@
 angular.module('dashApp')
-.controller('SetupCtrl',  function ($scope, Enrollmentdata) {
+.controller('SetupCtrl',  function ($scope, Enrollmentdata, $timeout) {
     var setupModule = 'setup';
     $scope.count = { total: 0 };
     $scope.devices = ['thermostats', 'modlets'];
     $scope.deviceSelected = ['thermostats', 'modlets'];
     $scope.noData = false;
 	var graphData = {},
-		counter = 0,
-		cumulativeCounter = 0;
+		dailyCounterSum = [],
+		cumulativeCounterSum = [];
 
 
     var updateSelected = function(action, deviceType) {
@@ -32,20 +32,21 @@ angular.module('dashApp')
 
      $scope.$watch('params', function(newValue, oldValue) {
 		$scope.drawGraph = function (){
-			 graphData = {};
+			graphData = {};
 	 		graphData.datasets = [];
-	 		 counter = 0;
-	 		 cumulativeCounter = 0;
+	 		dailyCounterSum = [];
+	 		cumulativeCounterSum = [];
 		 	if ($scope.params.product === "AC"){
 		 		for (var i in $scope.deviceSelected){
 					Enrollmentdata[setupModule]({"startDate": null, "endDate": null, "product": null}).$promise.then(function (result) {
-			    		parseGraphData(result);	
-			    	})
+			    			parseGraphData(result);	
+			    		});
 		 		}
 	 		} else {
+
 				Enrollmentdata[setupModule]({"startDate": null, "endDate": null, "product": null}).$promise.then(function (result) {
-		    		parseGraphData(result);	
-		    	})
+		    			parseGraphData(result);	
+		    		});
 		 	}
 		}();
 	}, true);
@@ -68,6 +69,8 @@ angular.module('dashApp')
 	
 	function parseGraphData(data){
 		var params = $scope.params,
+			counter = 0,
+			cumulativeCounter = 0,
 			dates = [],
 			labels = [],
 			pointsDayByDay = [],
@@ -128,8 +131,8 @@ angular.module('dashApp')
 						}
 					}
 				}
-				pointsDayByDay = pointsDayByDay;
-				pointsCum = pointsCum;
+				dailyCounterSum.push(counter);
+				cumulativeCounterSum.push(cumulativeCounter);
 				
 				for (var i in dates){
 					labels.push(dates[i].slice(0, -5));
@@ -159,7 +162,9 @@ angular.module('dashApp')
 			}
 		}
 	}
-
+	// $scope.$on("graph", function(event) {
+	//     $scope.graph = graphData;
+	// });
 	// no data for this module -- don't draw a graph.
 	// function noData(){
 	// 	elt.parent().hide();

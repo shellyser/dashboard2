@@ -2,6 +2,7 @@
 
 angular.module('dashApp')
 .controller('SignupCtrl',  function ($scope, Enrollmentdata) {
+    
     var signupModule = 'signup';
     $scope.count = { total: 0 };
 
@@ -9,9 +10,14 @@ angular.module('dashApp')
         if (newValue){
             $scope.drawGraph = function (){
         		Enrollmentdata[signupModule]({"startDate": null, "endDate": null, "product": null}).$promise.then(function (result) {
-        	    	parseGraphData(result);	
+        	    	parseMapData(result);	
+        	    	parseGraphData(result);
         		})
             }();
+          //   $scope.drawMap = function (){
+        		// Enrollmentdata[signupModule]({"startDate": null, "endDate": null, "product": null}).$promise.then(function (result) {
+        		// })
+          //   }();
         }
     }, true);
 	
@@ -29,31 +35,42 @@ angular.module('dashApp')
 			cumCounter = 0,
 			selectedYear = $scope.year;
 		
+		//grab data for graphing
 		signupData = data.years[selectedYear].data.GraphingData;
+
+		//get cumulative total
 		cumCounter = data.years[selectedYear].cumulativeTotal;
+		
+		//keys of graphing data are the dates
 		dates = Object.keys(signupData);
 
+		//take the year out of all the dates to shorten the labels
 		for (var i in dates){
 			labels.push(dates[i].slice(0, -5));
 		}
 
+
 		for (var key in signupData){
+			//insert value for each key into the pointDayByDay area
 			pointsDayByDay.push(signupData[key]);
+			//keep track of the total values
 			counter = counter + signupData[key];
+			//keep track of the cumulative total
 			cumCounter = cumCounter + signupData[key];
+			//insert the cumulative total for each day into the pointCum array
 			pointsCum.push(cumCounter);
 		}
-
+		//set the data for graphing for daybyday view
 		dataPointsDayByDay = {
 			label: "DayByDay",
 			data: pointsDayByDay
 		}
-
+		//set the data for graphing for cumulative view
 		dataPointsCumulative = {
 			label: "Cumulative",
 			data: pointsCum
 		}
-
+		//store labels in the graphData labels object
 		graphData.labels = labels;
 		graphData.datasets = [];
 		
@@ -66,6 +83,28 @@ angular.module('dashApp')
 		}
 
 		$scope.graph = graphData;
+	}
+
+	function parseMapData(data){
+  		var params = $scope.params,
+  			mapData = {},
+  			markers = [],
+  			points = [],
+			tempMapData = {},
+			selectedYear = $scope.year;
+
+		tempMapData = data.years[selectedYear].data.MappingData;
+		
+		for (var key in tempMapData) {
+			markers.push(key);
+			points.push(tempMapData[key]);
+		} 
+
+		mapData = {
+			'markers': markers,
+		 	'points': points
+		}
+		$scope.map = mapData;
 	}
 
 	function noData(){

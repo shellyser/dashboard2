@@ -8,43 +8,43 @@
                         "latitude": 40.752, 
                         "longitude": -73.995, 
                         "value": 1,
-                        "cumulativeTotal": 10
+                        "cumulativeTotal": 100
                     },
                     "10002":  {
-                        "lat": 40.716, 
-                        "long": -73.988, 
+                        "latitude": 40.716, 
+                        "longitude": -73.988, 
                         "value": 2,
-                        "cumulativeTotal": 20
+                        "cumulativeTotal": 203
                     },
                     "10003":  {
-                        "lat": 40.732, 
-                        "long": -73.990, 
+                        "latitude": 40.732, 
+                        "longitude": -73.990, 
                         "value": 2,
-                        "cumulativeTotal": 30
+                        "cumulativeTotal": 308
                     },
                     "10004":  {
-                        "lat": 40.704, 
-                        "long": -74.012, 
+                        "latitude": 40.704, 
+                        "longitude": -74.012, 
                         "value": 1,
-                        "cumulativeTotal": 20
+                        "cumulativeTotal": 203
                     },
                     "10005":  {
-                        "lat": 40.708, 
-                        "long": -74.012, 
+                        "latitude": 40.708, 
+                        "longitude": -74.012, 
                         "value": 4,
-                        "cumulativeTotal": 30
+                        "cumulativeTotal": 306
                     },
                     "10006":  {
-                        "lat": 40.711, 
-                        "long": -74.013, 
+                        "latitude": 40.711, 
+                        "longitude": -74.013, 
                         "value": 1,
-                        "cumulativeTotal": 10
+                        "cumulativeTotal": 103
                     },
                     "11233":  {
-                        "lat": 40.672, 
-                        "long": -73.925, 
+                        "latitude": 40.672, 
+                        "longitude": -73.925, 
                         "value": 1,
-                        "cumulativeTotal": 30
+                        "cumulativeTotal": 306
                     }
                 },
                 "GraphingData": {
