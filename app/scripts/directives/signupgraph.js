@@ -1,16 +1,13 @@
 angular.module('dashApp')
 .directive('signupGraph', function () {
 	return {
-		restrict: 'A',
-		link: function postLink(scope, elem, attrs) {
-			// function checkData(){
-			// 	if (jQuery.isEmptyObject(scope.graph)){
-			// 		noData();
-			// 	}
-			// 	else{
-			// 		populateGraph();
-			// 	}
-			// }
+		restrict: 'E',
+		scope: {
+			datapoints: "&",
+			module: "@"
+		},
+		link: function (scope, elem, attrs) {
+
 			function populateGraph(){
 				var canvas = elem[0];
 				var canvasId = elem.attr("id");
@@ -29,8 +26,9 @@ angular.module('dashApp')
 	            	
 				var autosize = false,
 				animate = false,
-				labels = scope.graph.labels,
-				datasets = scope.graph.datasets[0],
+				data = datapoints,
+				labels = data.labels,
+				datasets = data.datasets[0],
 				MAX_X_AXIS_POINTS = 31,
 				underPointCountThreshold = labels.length <= MAX_X_AXIS_POINTS,
 				hasZeroInData = false,
@@ -74,8 +72,8 @@ angular.module('dashApp')
 
 				showGraphArea(true);
 
-				scope.graph.datasets = [];
-				scope.graph.datasets.push(dataForGraphing);
+				data.datasets = [];
+				data.datasets.push(dataForGraphing);
 
 				var calcNewMin = false,
 					step = 0,
@@ -97,7 +95,7 @@ angular.module('dashApp')
 					multiTooltipTemplate: '<%= value %>',
 					tooltipFillColor: 'rgba(0, 0, 0, 0.6)',
 					tooltipFontFamily: 'PT Sans, sans-serif',
-					pointHitDetectionRadius: underPointCountThreshold ? Math.min(16, 16*(5/scope.graph.labels.length)) : 0,
+					pointHitDetectionRadius: underPointCountThreshold ? Math.min(16, 16*(5/data.labels.length)) : 0,
 					showXLabels: underPointCountThreshold ? true : MAX_X_AXIS_POINTS
 				};
 				options.animation = underPointCountThreshold ? animate : false;
@@ -156,7 +154,7 @@ angular.module('dashApp')
 				}
 
 				var ctx = canvas.getContext("2d");
-				var newGraph = new Chart(ctx).Line(scope.graph, options);
+				var newGraph = new Chart(ctx).Line(data, options);
 				showGraphArea();
 				// if (newGraph){
 				// 	elem.closest('.module-body').find('.module-loading').fadeOut();

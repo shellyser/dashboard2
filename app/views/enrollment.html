@@ -19,8 +19,8 @@
           <select class="main-utils-options" ng-model="params.product" ng-options="product for product in enrollment.Products">
           </select>
         </div>
-        <label ng-repeat= "commType in enrollment.CommunicationTypes">
-          <input type="checkbox" name="selectedComms[]" value="{{commType}}" ng-checked="isSelected(commType)" ng-click="updateSelection($event, commType)">{{commType}}
+        <label ng-show="enrollment.CommunicationTypes.length > 1"  class="main-utils-gateways" ng-repeat= "commType in enrollment.CommunicationTypes">
+          <input type="checkbox" name="selectedComms[]" value="{{commType}}" ng-checked="isSelected(commType)" ng-click="updateSelection($event, commType)">{{commType | capitalize }}
         </label>
         <!-- <ul ng-show="enrollment.CommunicationTypes.length > 1"  class="main-utils-gateways">
             <li ng-repeat="commType in enrollment.CommunicationTypes" ng-class="{ active: (params.communication).indexOf(enrollment.CommunicationTypeSlugs[$index]) > -1 }" communication-type communication-type-name={{enrollment.CommunicationTypeSlugs[$index]}}>
