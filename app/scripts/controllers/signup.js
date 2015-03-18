@@ -1,25 +1,31 @@
 
 
 angular.module('dashApp')
-.controller('SignupCtrl',  function ($scope, Enrollmentdata) {
+.controller('SignupCtrl',  function ($scope, SignupModel) {
     
-    var signupModule = 'signup';
-    var signup = this;
-    signup.count = { total: 0 };
+    // var $scope = this;
+    $scope.count = { total: 0 };
 
-	signup.$watch('params', function(newValue, oldValue) {
+	$scope.$watch('params', function(newValue, oldValue) {
         if (newValue){
-            signup.getData = function (){
-        		Enrollmentdata[signupModule]({"startDate": null, "endDate": null, "product": null}).$promise.then(function (result) {
-        	    	// parseMapData(result);	
-        	    	parseGraphData(result);
-        		})
-            }();
+        	var params = {
+        		param1: $scope.params.startDate,
+        		param2: $scope.params.endDate,
+        		param3: $scope.params.product,
+        	};
+        	var config = {
+        		params: params
+        	}
+
+            SignupModel.getSignups(config)
+            	.then(function(result){
+            		parseGraphData(result);
+            	})
         }
     }, true);
 	
 	function parseGraphData(data){
-		var params = signup.params,
+		var params = $scope.params,
 			dates = [],
 			labels = [],
 			pointsDayByDay = [],
@@ -30,7 +36,7 @@ angular.module('dashApp')
 			dataPointsCum = {},
 			counter = 0,
 			cumCounter = 0,
-			selectedYear = signup.year;
+			selectedYear = $scope.year;
 		
 		//grab data for graphing
 		signupData = data.years[selectedYear].data.GraphingData;
@@ -71,24 +77,24 @@ angular.module('dashApp')
 		graphData.labels = labels;
 		graphData.datasets = [];
 		
-		if (signup.params.viewtype === "DayByDay"){
+		if ($scope.params.viewtype === "DayByDay"){
 			graphData.datasets.push(dataPointsDayByDay);
-			signup.count = { total: counter};
+			$scope.count = { total: counter};
 		} else {
 			graphData.datasets.push(dataPointsCumulative);
-			signup.count = { total: cumCounter};	
+			$scope.count = { total: cumCounter};	
 		}
 
-		signup.graph = graphData;
+		$scope.graph = graphData;
 	}
 
 	function parseMapData(data){
-  		var params = signup.params,
+  		var params = $scope.params,
   			mapData = {},
   			markers = [],
   			points = [],
 			tempMapData = {},
-			selectedYear = signup.year;
+			selectedYear = $scope.year;
 
 		tempMapData = data.years[selectedYear].data.MappingData;
 		
@@ -101,7 +107,7 @@ angular.module('dashApp')
 			'markers': markers,
 		 	'points': points
 		}
-		signup.map = mapData;
+		$scope.map = mapData;
 	}
 
 	function noData(){

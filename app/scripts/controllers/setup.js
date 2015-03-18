@@ -1,13 +1,13 @@
 angular.module('dashApp')
-.controller('SetupCtrl',  function ($scope, Enrollmentdata, $timeout) {
+.controller('SetupCtrl',  function ($scope, SetupModel) {
     var setupModule = 'setup';
     $scope.count = { total: 0 };
-    $scope.devices = ['thermostats', 'modlets'];
-    $scope.deviceSelected = ['thermostats', 'modlets'];
+    $scope.devices = ['modlets', 'thermostats'];
+    $scope.deviceSelected = ['modlets', 'thermostats'];
     $scope.noData = false;
-	var graphData = {},
-		dailyCounterSum = [],
-		cumulativeCounterSum = [];
+	var dailyCounterArray = [],
+		cumulativeCounterArray = [],
+		graphDataArray = [];
 
 
     var updateSelected = function(action, deviceType) {
@@ -31,46 +31,60 @@ angular.module('dashApp')
 
 
      $scope.$watch('params', function(newValue, oldValue) {
-		$scope.drawGraph = function (){
-			graphData = {};
-	 		graphData.datasets = [];
-	 		dailyCounterSum = [];
-	 		cumulativeCounterSum = [];
+     	if (newValue){
+     		$scope.graph = [];
+	 		dailyCounterArray = [];
+	 		cumulativeCounterArray = [];
+	 		graphDataArray = [];
 		 	if ($scope.params.product === "AC"){
-		 		for (var i in $scope.deviceSelected){
-					Enrollmentdata[setupModule]({"startDate": null, "endDate": null, "product": null}).$promise.then(function (result) {
-			    			parseGraphData(result);	
-			    		});
+		 		var params1 = {
+		 			param1: null, //$scope.params.startDate,
+		 			param2: null, //$scope.params.endDate,
+		 			param3: null, //$scope.params.product,
+		 			param4: null //$scope.devices[0],
 		 		}
+		 		var config1 = {
+		 			params: params1
+		 		}
+		 		var params2 = {
+		 			param1: null, //$scope.params.startDate,
+		 			param2: null, //$scope.params.endDate,
+		 			param3: null, //$scope.params.product,
+		 			param4: null //$scope.devices[1]
+		 		}
+		 		var config2 = {
+		 			params: params2
+		 		}
+		 		SetupModel.getSetupsDevices(config1, config2)
+		 			.then(function(result){
+		 				console.log(result);
+		 				parseGraphData(result);
+		 			})
 	 		} else {
-
-				Enrollmentdata[setupModule]({"startDate": null, "endDate": null, "product": null}).$promise.then(function (result) {
-		    			parseGraphData(result);	
-		    		});
+	 			var params = {
+	 				param1: null, //$scope.params.startDate,
+	 				param2: null, //$scope.params.endDate,
+	 				param3: null, //$scope.params.product,
+	 			};
+	 			var config = {
+	 				params: params
+	 			};
+	 			SetupModel.getSetups(config)
+	 				.then(function(result){
+	 					console.log(result);
+	 					parseGraphData(result);
+	 				})
 		 	}
-		}();
+		};
 	}, true);
-
-  //    $scope.$watch('devices', function(newValue, oldValue) {
-		// if (newValue){
-		// 	$scope.drawGraph = function (){
-		// 		graphData = {};
-		// 		graphData.datasets = [];
-		// 		 counter = 0;
-		// 		 cumulativeCounter = 0;
-		//  		for (var i in $scope.deviceSelected){
-		// 			Enrollmentdata[setupModule]({"startDate": null, "endDate": null, "product": null, "device": null}).$promise.then(function (result) {
-		// 	    		parseGraphData(result);	
-		// 	    	})
-		// 	    }
-		// 	}();
-		// }
-  //    }, true);
 	
 	function parseGraphData(data){
+		for (var dataset in data){
+
 		var params = $scope.params,
 			counter = 0,
 			cumulativeCounter = 0,
+			graphData = {},
 			dates = [],
 			labels = [],
 			pointsDayByDay = [],
@@ -82,85 +96,86 @@ angular.module('dashApp')
 			cumCounterArray = [],
 			// pointNumber,
 			selectedYear = $scope.year;
-			
-		if (params.commTypeSelected.length === 0){
-			// noData();
-		}
-		else{
-			//add selected communication types to setupData and set their values
-			for (var i in params.commTypeSelected){
-				var list = params.commTypeSelected[i].toLowerCase();
-				setupData[list] = data.years[selectedYear].data.GraphingData[list];
+		
+		
+			if (params.commTypeSelected.length === 0){
+				// noData();
 			}
-
-			//track # of undefined lists within setupData
-			var undefinedListsCount = 0,
-			definedlistsCount = 0;
-			for (var setupList in setupData){
-				if (!setupData[setupList]){
-					undefinedListsCount++;
+			else{
+				//add selected communication types to setupData and set their values
+				for (var i in params.commTypeSelected){
+					var list = params.commTypeSelected[i].toLowerCase();
+					setupData[list] = data[dataset].years[selectedYear].data.GraphingData[list];
 				}
-				else{
-					if(definedlistsCount === 0){
-						dates = Object.keys(setupData[setupList].data);
-					}
-					definedlistsCount++;
-				}
-			}
 
-			// make sure setupData has at least one defined communication list
-			if (definedlistsCount > 0) {
-				numberOfPoints = dates.length;
-				//   init daybyday view graphPoints array with 0s
-				pointsDayByDay = Array.apply(null, new Array(numberOfPoints)).map(Number.prototype.valueOf,0);
-				//   init cumulative view graphPoints array with cumulativeTotal
-				pointsCum = Array.apply(null, new Array(numberOfPoints)).map(Number.prototype.valueOf,0);
-
+				//track # of undefined lists within setupData
+				var undefinedListsCount = 0,
+				definedlistsCount = 0;
 				for (var setupList in setupData){
-					if (setupData[setupList] !== undefined){
-						var eltCounter = 0;
-						cumulativeCounter += setupData[setupList].cumulativeTotal;
-						for (var elt in setupData[setupList].data){
-							// add this value to the y-value of the relevant point
-							var value = setupData[setupList].data[elt];
-							cumulativeCounter += value;
-							counter += value;
-							pointsDayByDay[eltCounter] += value;
-							pointsCum[eltCounter] = cumulativeCounter;
-							eltCounter ++;
+					if (!setupData[setupList]){
+						undefinedListsCount++;
+					}
+					else{
+						if(definedlistsCount === 0){
+							dates = Object.keys(setupData[setupList].data);
+						}
+						definedlistsCount++;
+					}
+				}
+
+				// make sure setupData has at least one defined communication list
+				if (definedlistsCount > 0) {
+					numberOfPoints = dates.length;
+					//   init daybyday view graphPoints array with 0s
+					pointsDayByDay = Array.apply(null, new Array(numberOfPoints)).map(Number.prototype.valueOf,0);
+					//   init cumulative view graphPoints array with cumulativeTotal
+					pointsCum = Array.apply(null, new Array(numberOfPoints)).map(Number.prototype.valueOf,0);
+
+					for (var setupList in setupData){
+						if (setupData[setupList] !== undefined){
+							var eltCounter = 0;
+							cumulativeCounter += setupData[setupList].cumulativeTotal;
+							for (var elt in setupData[setupList].data){
+								// add this value to the y-value of the relevant point
+								var value = setupData[setupList].data[elt];
+								cumulativeCounter += value;
+								counter += value;
+								pointsDayByDay[eltCounter] += value;
+								pointsCum[eltCounter] = cumulativeCounter;
+								eltCounter ++;
+							}
 						}
 					}
-				}
-				dailyCounterSum.push(counter);
-				cumulativeCounterSum.push(cumulativeCounter);
-				
-				for (var i in dates){
-					labels.push(dates[i].slice(0, -5));
-				}
+					dailyCounterArray.push(counter);
+					cumulativeCounterArray.push(cumulativeCounter);
+					
+					for (var i in dates){
+						labels.push(dates[i].slice(0, -5));
+					}
 
-				dataPointsDayByDay = {
-					label: "DayByDay",
-					data: pointsDayByDay
-				}
+					dataPointsDayByDay = {
+						data: pointsDayByDay
+					}
 
-				dataPointsCumulative = {
-					label: "Cumulative",
-					data: pointsCum
-				}
+					dataPointsCumulative = {
+						data: pointsCum
+					}
 
-				graphData.labels = labels;
-				// graphData.datasets = [];
-				
-				if ($scope.params.viewtype === "DayByDay"){
-					graphData.datasets.push(dataPointsDayByDay);
-					$scope.count = { total: counter};
-				} else {
-					graphData.datasets.push(dataPointsCumulative);
-					$scope.count = { total: cumulativeCounter};	
+					graphData.labels = labels;
+					// graphData.datasets = [];
+					
+					if ($scope.params.viewtype === "DayByDay"){
+						graphData.datasets= dataPointsDayByDay;
+						$scope.countArray = { total: dailyCounterArray};
+					} else {
+						graphData.datasets= dataPointsCumulative;
+						$scope.countArray = { total: cumulativeCounterArray};	
+					}
+					graphDataArray.push(graphData);
 				}
-				$scope.graph = graphData;
 			}
-		}
+		}	
+		$scope.graph = graphDataArray;
 	}
 	// $scope.$on("graph", function(event) {
 	//     $scope.graph = graphData;

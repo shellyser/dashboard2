@@ -14,6 +14,7 @@ angular.module('dashApp')
 				var canvas = elem[0];
 				var canvasId = elem.attr("id");
 				animate = ANIMATE_GRAPH,
+				points = [],
 				width = elem.closest('.module').css('width');
 				
 				//set canvas to width of parent
@@ -25,12 +26,15 @@ angular.module('dashApp')
 	            		Chart.instances[instance].destroy();
 	            	}
 	            }
+
+	            for (var datasets in scope.graph){
+	            	points.push(scope.graph[datasets].datasets);
+	            }
 	            	
 				var autosize = false,
 				dataForGraphing = [],
-				animate = false,
-				labels = scope.graph.labels,
-				points = scope.graph.datasets,
+				animate = true,
+				labels = scope.graph[0].labels,
 				MAX_X_AXIS_POINTS = 31,
 				underPointCountThreshold = labels.length <= MAX_X_AXIS_POINTS,
 				hasZeroInData = false,
@@ -167,7 +171,7 @@ angular.module('dashApp')
 					options.scaleStartValue = graphDims.min;
 					options.scaleStepWidth = graphDims.step;
 				}
-				scope.graph = graphData;
+				// scope.graph = graphData;
 				var ctx = canvas.getContext("2d");
 				var newGraph = new Chart(ctx).Line(graphData, options);
 				showGraphArea();

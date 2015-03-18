@@ -13,7 +13,7 @@
             <div class="module-view-options-checkboxes">
                 <div class="module-view-options-checkbox">
                     <label ng-repeat="device in devices">
-                        <input type="checkbox" class="checkbox-option" ng-checked="isDeviceSelected(device)" ng-click="updateDeviceSelection($event, device)" id="{{device}}" attr-dataset="{{device}}">{{device}}
+                        <input type="checkbox" class="checkbox-option" ng-checked="isDeviceSelected(device)" ng-click="updateDeviceSelection($event, device)" id="{{device}}" chart-number="">{{device}}
                     </label>
                 </div>
             </div>
