@@ -1,13 +1,17 @@
 angular.module('dashApp')
 .controller('SetupCtrl',  function ($scope, SetupModel) {
     var setupModule = 'setup';
-    $scope.count = { total: 0 };
     $scope.devices = ['modlets', 'thermostats'];
     $scope.deviceSelected = ['modlets', 'thermostats'];
     $scope.noData = false;
-	var dailyCounterArray = [],
-		cumulativeCounterArray = [],
-		graphDataArray = [];
+    $scope.displayData = function(){
+    	if ($scope.noData){
+    		$scope.count = {total: '—'}
+    	}
+    	return $scope.noData;
+    };
+	var dailyTotal = 0,
+		cumulativeTotal = 0;
 
 
     var updateSelected = function(action, deviceType) {
@@ -16,6 +20,63 @@ angular.module('dashApp')
 		}
 		if (action === 'remove' && $scope.deviceSelected.indexOf(deviceType) !== -1) {
 			$scope.deviceSelected.splice($scope.deviceSelected.indexOf(deviceType), 1);
+		}
+ 		$scope.graph = [];
+ 		dailyTotal = 0,
+		cumulativeTotal = 0,
+ 		graphDataArray = [];
+		var params1 = {
+			param1: null, //$scope.params.startDate,
+			param2: null, //$scope.params.endDate,
+			param3: null, //$scope.params.product,
+			param4: null //$scope.devices[0],
+		}
+		var config1 = {
+			params: params1
+		}
+		var params2 = {
+			param1: null, //$scope.params.startDate,
+			param2: null, //$scope.params.endDate,
+			param3: null, //$scope.params.product,
+			param4: null //$scope.devices[1]
+		}
+		var config2 = {
+			params: params2
+		}
+		var params = {
+			param1: null, //$scope.params.startDate,
+			param2: null, //$scope.params.endDate,
+			param3: null, //$scope.params.product,
+		};
+		var config = {
+			params: params
+		}
+		if ($scope.deviceSelected.length === 1){
+			if ($scope.deviceSelected[0] === "modlets"){
+				SetupModel.getSetupsModlets(config1)
+					.then(function(result){
+						console.log(result);
+						parseGraphData(result);
+						$scope.noData = false;
+				})
+			} else {
+				SetupModel.getSetupsThermostats(config2)
+					.then(function(result){
+						console.log(result);
+						parseGraphData(result);
+						$scope.noData = false;
+				})
+			}
+		}
+		else if ($scope.deviceSelected.length === 2){
+			SetupModel.getSetupsDevices(config1, config2)
+				.then(function(result){
+					console.log(result);
+					parseGraphData(result);
+			})
+		} 
+		else {
+			$scope.noData = true;
 		}
 	};
 
@@ -33,42 +94,44 @@ angular.module('dashApp')
      $scope.$watch('params', function(newValue, oldValue) {
      	if (newValue){
      		$scope.graph = [];
-	 		dailyCounterArray = [];
-	 		cumulativeCounterArray = [];
+	 		dailyTotal = 0,
+			cumulativeTotal = 0,
 	 		graphDataArray = [];
+	 		var params1 = {
+	 			param1: null, //$scope.params.startDate,
+	 			param2: null, //$scope.params.endDate,
+	 			param3: null, //$scope.params.product,
+	 			param4: null //$scope.devices[0],
+	 		}
+	 		var config1 = {
+	 			params: params1
+	 		}
+	 		var params2 = {
+	 			param1: null, //$scope.params.startDate,
+	 			param2: null, //$scope.params.endDate,
+	 			param3: null, //$scope.params.product,
+	 			param4: null //$scope.devices[1]
+	 		}
+	 		var config2 = {
+	 			params: params2
+	 		}
+	 		var params = {
+	 			param1: null, //$scope.params.startDate,
+	 			param2: null, //$scope.params.endDate,
+	 			param3: null, //$scope.params.product,
+	 		};
+	 		var config = {
+	 			params: params
+	 		};
 		 	if ($scope.params.product === "AC"){
-		 		var params1 = {
-		 			param1: null, //$scope.params.startDate,
-		 			param2: null, //$scope.params.endDate,
-		 			param3: null, //$scope.params.product,
-		 			param4: null //$scope.devices[0],
-		 		}
-		 		var config1 = {
-		 			params: params1
-		 		}
-		 		var params2 = {
-		 			param1: null, //$scope.params.startDate,
-		 			param2: null, //$scope.params.endDate,
-		 			param3: null, //$scope.params.product,
-		 			param4: null //$scope.devices[1]
-		 		}
-		 		var config2 = {
-		 			params: params2
-		 		}
+		 	
 		 		SetupModel.getSetupsDevices(config1, config2)
 		 			.then(function(result){
 		 				console.log(result);
 		 				parseGraphData(result);
 		 			})
 	 		} else {
-	 			var params = {
-	 				param1: null, //$scope.params.startDate,
-	 				param2: null, //$scope.params.endDate,
-	 				param3: null, //$scope.params.product,
-	 			};
-	 			var config = {
-	 				params: params
-	 			};
+	 			
 	 			SetupModel.getSetups(config)
 	 				.then(function(result){
 	 					console.log(result);
@@ -77,13 +140,17 @@ angular.module('dashApp')
 		 	}
 		};
 	}, true);
+
+	
 	
 	function parseGraphData(data){
+		if (data.length !== 2){
+			data = [data];
+			console.log(data);
+		}
 		for (var dataset in data){
 
 		var params = $scope.params,
-			counter = 0,
-			cumulativeCounter = 0,
 			graphData = {},
 			dates = [],
 			labels = [],
@@ -92,16 +159,16 @@ angular.module('dashApp')
 			setupData = {},
 			dataPointsDayByDay = {},
 			dataPointsCum = {},
-			counterArray = [],
-			cumCounterArray = [],
-			// pointNumber,
+			counter = 0,
+			cumulativeCounter = 0,
 			selectedYear = $scope.year;
 		
 		
 			if (params.commTypeSelected.length === 0){
-				// noData();
+				$scope.noData = true;
 			}
 			else{
+				$scope.noData = false;
 				//add selected communication types to setupData and set their values
 				for (var i in params.commTypeSelected){
 					var list = params.commTypeSelected[i].toLowerCase();
@@ -146,8 +213,9 @@ angular.module('dashApp')
 							}
 						}
 					}
-					dailyCounterArray.push(counter);
-					cumulativeCounterArray.push(cumulativeCounter);
+					dailyTotal += counter,
+					cumulativeTotal += cumulativeCounter;
+
 					
 					for (var i in dates){
 						labels.push(dates[i].slice(0, -5));
@@ -162,14 +230,13 @@ angular.module('dashApp')
 					}
 
 					graphData.labels = labels;
-					// graphData.datasets = [];
 					
 					if ($scope.params.viewtype === "DayByDay"){
 						graphData.datasets= dataPointsDayByDay;
-						$scope.countArray = { total: dailyCounterArray};
+						$scope.count = { total: dailyTotal};
 					} else {
 						graphData.datasets= dataPointsCumulative;
-						$scope.countArray = { total: cumulativeCounterArray};	
+						$scope.count = { total: cumulativeTotal};	
 					}
 					graphDataArray.push(graphData);
 				}
@@ -177,14 +244,4 @@ angular.module('dashApp')
 		}	
 		$scope.graph = graphDataArray;
 	}
-	// $scope.$on("graph", function(event) {
-	//     $scope.graph = graphData;
-	// });
-	// no data for this module -- don't draw a graph.
-	// function noData(){
-	// 	elt.parent().hide();
-	// 	showGraphArea(false);
-	// 	elt.closest('.module-body').find('.module-body-stat').text('\u2014');
-	// 	elt.closest('.module-body').prev().find('.module-stat').text('\u2014');
-	// }
 });

@@ -9,7 +9,7 @@
  * Controller of the dashApp
  */
 angular.module('dashApp')
-.controller('EnrollmentCtrl',  function ($scope, enrollmentData, user, $rootScope, $cacheFactory) {
+.controller('EnrollmentCtrl',  function ($scope, EnrollmentModel, user, $rootScope, $cacheFactory) {
 	var cache = $cacheFactory('enrollmentCache');
 
 	if (cache.get('params') === undefined) {
@@ -17,14 +17,14 @@ angular.module('dashApp')
 	
 	var date = 7;
 
-	$scope.enrollment = enrollmentData;
+	$scope.enrollment = EnrollmentModel.getEnrollments();
 	$('#loading').fadeOut();        
 
-	if (enrollmentData.DateSpan === undefined){
+	if ($scope.enrollment.DateSpan === undefined){
 	$scope.enrollment.DateSpan = date;
 	}
 	else{
-	date = enrollmentData.DateSpan;
+	date = $scope.enrollment.DateSpan;
 	}
 
 	var endDate = moment().endOf('day').subtract(1, 'days').format("MM/DD/YYYY"),
@@ -74,11 +74,9 @@ angular.module('dashApp')
   
 	$scope.drawGraph = {};
 
-}
-else{
-	cache.put('params', $scope.params);
-}
-
-
+	}
+	else{
+		cache.put('params', $scope.params);
+	}
 
 });

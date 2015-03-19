@@ -3,14 +3,7 @@ angular.module('dashApp')
 	return {
 		restrict: 'A',
 		link: function postLink(scope, elem, attrs) {
-			// function checkData(){
-			// 	if (jQuery.isEmptyObject(scope.graph)){
-			// 		noData();
-			// 	}
-			// 	else{
-			// 		populateGraph();
-			// 	}
-			// }
+
 			function populateGraph(){
 				var canvas = elem[0];
 				var canvasId = elem.attr("id");
@@ -158,6 +151,7 @@ angular.module('dashApp')
 				var ctx = canvas.getContext("2d");
 				var newGraph = new Chart(ctx).Line(scope.graph, options);
 				showGraphArea();
+
 				// if (newGraph){
 				// 	elem.closest('.module-body').find('.module-loading').fadeOut();
 				// }

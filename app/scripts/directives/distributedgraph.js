@@ -1,12 +1,19 @@
 angular.module('dashApp')
-.directive('distributedgraph', function () {
+.directive('distributedgraph', function ($timeout) {
   return {
     restrict: 'A',
     link: function postLink(scope, elem, attrs) {
+        scope.$watch('graph', function() {
+          $timeout(function() {
+              populateGraph();
+            })
+        }, true);
+
       function populateGraph(){
         var canvas = elem[0];
         var canvasId = elem.attr("id");
         animate = ANIMATE_GRAPH,
+        points = [],
         allOptionsUnchecked = false,
         width = elem.closest('.module').css('width');
         //set canvas to width of parent
@@ -14,15 +21,19 @@ angular.module('dashApp')
 
         //eliminates any existing instance of Chart
         for (var instance in Chart.instances){
-                if (Chart.instances[instance].chart.canvas.id === canvasId){
-                  Chart.instances[instance].destroy();
-                }
-              }
-                
+          if (Chart.instances[instance].chart.canvas.id === canvasId){
+            Chart.instances[instance].destroy();
+          }
+        }
+         
+        for (var datasets in scope.graph){
+          points.push(scope.graph[datasets].datasets);
+        }
+
         var autosize = false,
-        animate = false,
-        labels = scope.graph.labels,
-        datasets = scope.graph.datasets[0],
+        dataForGraphing = [],
+        animate = true,
+        labels = scope.graph[0].labels,
         MAX_X_AXIS_POINTS = 31,
         underPointCountThreshold = labels.length <= MAX_X_AXIS_POINTS,
         hasZeroInData = false,
@@ -38,39 +49,63 @@ angular.module('dashApp')
         fillColor = color.replace(')', ', 0.3)');
         lineColor = color.replace(')', ', 1)');
 
-        var dataForGraphing = {
-          label: datasets.label,
-          fillColor: fillColor,
-          strokeColor: lineColor,//'rgba(0, 0, 0, 0)',
-          pointStrokeColor: lineColor,
-          pointColor: 'rgba(240, 240, 240, 1)',
-          data: datasets.data
-        };
-
-        // construct total and max of data
-        for (i in datasets.data){
-          if (parseInt(i) === 0){
-            min = datasets.data[i];
-            max = datasets.data[i];
+        for (var pointSet in points){
+          var factor = -55,
+          difference = 0,
+          differenceIsSignificant = true,
+          r = parseInt(fillColor.split(',')[0].split('(')[1]) + factor*pointSet,
+          g = parseInt(fillColor.split(',')[1]) + factor*pointSet,
+          b = parseInt(fillColor.split(',')[2]) + factor*pointSet,
+          newFillColor = 'rgba(' + r + ', ' + g + ', ' + b + ', 0.3)',
+          newLineColor = newFillColor.replace('0.3', '1'),
+          pointSetCheck = elem.closest('.module-body')
+          .find('.module-view-options-checkbox:eq(' + pointSet + ')');
+          dataForGraphing.push({
+            data: points[pointSet].data,
+            fillColor: newFillColor,
+            strokeColor: newLineColor,// 'rgba(0, 0, 0, 0)',
+            pointStrokeColor: newLineColor,
+            pointColor: 'rgba(240, 240, 240, 1)'
+          });
+          pointSetCheck.find('label').css('color', newLineColor);
+          // construct total and max of data
+          for (i in points[pointSet].data){
+            if ((parseInt(pointSet) === 0) && (parseInt(i) === 0)){
+              min = points[pointSet].data[i];
+            }
+            if (points[pointSet].data[i] === 0){
+              hasZeroInData = true;
+            }
+            if (points[pointSet].data[i] > max){
+              max = points[pointSet].data[i];
+            }
+            else if (points[pointSet].data[i] < min){
+              min = points[pointSet].data[i];
+            }
           }
-          if (datasets.data[i] === 0){
-            hasZeroInData = true;
+          // check if the difference between the datasets is significant
+          // relative to the actual values in the datasets
+          difference = max - min;
+          differenceIsSignificant = (difference/((min + max)/2)) > .1;
+          // if the difference isn't signficant,
+          // tweak the min and max to emphasize
+          // absolute rather than relative values
+          if (!differenceIsSignificant){
+            var factor = 2;
+            min = min/factor;
+            max = max + (max/(factor*factor));
           }
-          if (datasets.data[i] < min){
-            min = datasets.data[i];
-          }
-          if (datasets.data[i] > max){
-            max = datasets.data[i];
-          }
+          constructedTotal = true;
         }
-
+      var underPointCountThreshold = labels.length <= MAX_X_AXIS_POINTS;
         showGraphArea(true);
-
-        scope.graph.datasets = [];
-        scope.graph.datasets.push(dataForGraphing);
-
-        var calcNewMin = false,
-          step = 0,
+        // getting info into the right format for chartjs
+        var graphData = {
+          labels: labels,
+          datasets: dataForGraphing
+        },
+        calcNewMin = false,
+        step = 0,
         options = {
           scaleOverride: true,
           scaleSteps: 10,
@@ -82,28 +117,17 @@ angular.module('dashApp')
           pointDotStrokeWidth: 2,
           datasetStroke : !underPointCountThreshold,
           datasetStrokeWidth : 1,
-          scaleLabel: '<%=value%>',
+          scaleLabel: '<%=value%>   ',
           responsive: true,
           maintainAspectRatio: false,
           tooltipTemplate: '<%= value %>',
           multiTooltipTemplate: '<%= value %>',
           tooltipFillColor: 'rgba(0, 0, 0, 0.6)',
           tooltipFontFamily: 'PT Sans, sans-serif',
-          pointHitDetectionRadius: underPointCountThreshold ? Math.min(16, 16*(5/scope.graph.labels.length)) : 0,
+          pointHitDetectionRadius: underPointCountThreshold ? Math.min(16, 16*(5/graphData.labels.length)) : 0,
           showXLabels: underPointCountThreshold ? true : MAX_X_AXIS_POINTS
         };
         options.animation = underPointCountThreshold ? animate : false;
-        options.animation = true;
-
-        // scope.size = function () {
-        //  elem.width(elem.parent().width());
-        //  ctx.canvas.width = elem.width();
-        //  elem.height(elem.parent().height());
-        //  ctx.canvas.height = ctx.canvas.width / 2;
-        // }
-          
-        // scope.size();
-
         if (scope.params.viewtype.toLowerCase() !== 'cumulative'){
           var startVal = 0;
           if (min < 0){
@@ -131,8 +155,8 @@ angular.module('dashApp')
           calcNewMin = true;
           options.scaleStartValue = min;
           step = Math.ceil((max - min)/10);
-        }
-
+        } 
+        
         // let's draw!
         elem.show();
         step = fitStepToContext(snapTo(step), min.toString().length);
@@ -146,20 +170,11 @@ angular.module('dashApp')
           options.scaleStartValue = graphDims.min;
           options.scaleStepWidth = graphDims.step;
         }
-
+        // scope.graph = graphData;
         var ctx = canvas.getContext("2d");
-        var newGraph = new Chart(ctx).Line(scope.graph, options);
+        var newGraph = new Chart(ctx).Line(graphData, options);
         showGraphArea();
-        // if (newGraph){
-        //  elem.closest('.module-body').find('.module-loading').fadeOut();
-        // }
       }
-
-      scope.$watch('graph', function(newValue, oldValue) {
-          if (newValue)
-          // newGraph.Line.destroy();
-          populateGraph();
-      }, true);
 
       function calcMinAndStep(min, max, step){
         var solution = {

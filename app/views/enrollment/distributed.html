@@ -21,7 +21,7 @@
     </div>
     <div class="module-loading"><span class="fa fa-circle-o-notch fa-spin loading-icon"></span></div>
     <div class="module-grapharea">
-        <div class="graph-wrap" ng-switch on="radiobutton" ng-hide="noData" style="width:100%; height: 100%">
+        <div class="graph-wrap" ng-switch on="radiobutton" ng-hide="displayData()" style="width:100%; height: 100%">
           <canvas id="graph-distributed" distributedgraph graph-content="{{module}}" graph-num="3" ng-switch-when="Graph"></canvas>   
          <!--  <div id="map-canvas" map map-content="{{module}}" map-num="{{$index + 1}}"  ng-switch-when="Map"></div>  -->
         </div>

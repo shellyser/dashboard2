@@ -1,5 +1,5 @@
 {
-    "Communications": [
+    "CommunicationTypes": [
         "Ethernet",
         "USB",
         "Wifi",
@@ -9,38 +9,22 @@
         "AC",
         "Customer"
     ],
-    "CommunicationTypeSlugs": [
-        "ethernet",
-        "usb",
-        "wifi",
-        "kuhl"
-    ],
-    "Modules": [
-        "signup"
+    "ModuleTypes": [
+        "signup",
+        "distributed",
+        "setup",
+        "online"
     ],
     "TimePeriods": [
         "2014",
         "AllYears"
     ],
-    "ViewsTypes": [
+    "ViewTypes": [
         "DayByDay",
         "Cumulative"
     ],
     "ViewForms": [
         "Graph",
         "Map"
-    ],
-    "DateSpan": 7,
-    "Defaults": {
-        "View": "DayByDay",
-        "Product": "AC",
-        "DateSpan": "7",
-        "Communication": [
-            "ethernet",
-            "usb",
-            "wifi",
-            "kuhl"
-        ],
-        "ViewType": "Graph"
-    }
-}
+    ]
+}   
