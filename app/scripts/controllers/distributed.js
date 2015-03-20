@@ -26,9 +26,8 @@ angular.module('dashApp')
 			$scope.statusSelected.splice($scope.statusSelected.indexOf(status), 1);
 		}
    		$scope.graph = [];
- 		dailyTotal = 0,
-		cumulativeTotal = 0,
- 		graphDataArray = [];
+ 		var dailyTotal = 0;	
+		
  		var params1 = {
  			param1: null, //$scope.params.startDate,
  			param2: null, //$scope.params.endDate,
@@ -54,14 +53,20 @@ angular.module('dashApp')
   				DistributedModel.getDistributedDelivered(config1)
   					.then(function(result){
   						console.log(result);
-  						parseGraphData(result);
+	  					var cumulativeTotal = 0,
+	  					dailyTotal = 0,
+				 		graphDataArray = [];
+  						parseGraphData(result, graphDataArray, dailyTotal, cumulativeTotal);
   						$scope.noData = false;
   				})
   			} else {
   				DistributedModel.getDistributedShipped(config2)
   					.then(function(result){
   						console.log(result);
-  						parseGraphData(result);
+	  					var cumulativeTotal = 0,
+	  					dailyTotal = 0,
+				 		graphDataArray = [];
+  						parseGraphData(result, graphDataArray, dailyTotal, cumulativeTotal);
   						$scope.noData = false;
   				})
   			}
@@ -70,7 +75,10 @@ angular.module('dashApp')
   			DistributedModel.getDistributedStatuses(config1, config2)
   				.then(function(result){
   					console.log(result);
-  					parseGraphData(result);
+  					var cumulativeTotal = 0,
+  					dailyTotal = 0,
+			 		graphDataArray = [];
+  					parseGraphData(result, graphDataArray, dailyTotal, cumulativeTotal);
   			})
   		} 
   		else {
@@ -88,10 +96,68 @@ angular.module('dashApp')
 	  	return $scope.statusSelected.indexOf(status) >= 0;
 	};
 
-	$scope.$watchGroup(['params', 'distributedparams'], function(newValue, oldValue) {
+	$scope.$watch('distributedparams', function(newValue, oldValue) {
       	if (newValue){
       		$scope.graph = [];
-	 		dailyTotal = 0,
+	 		var dailyTotal = 0,
+			cumulativeTotal = 0,
+	 		graphDataArray = [];
+ 	 		var params1 = {
+ 	 			param1: null, //$scope.params.startDate,
+ 	 			param2: null, //$scope.params.endDate,
+ 	 			param3: null, //$scope.params.product
+ 	 			param4: null, //$scope.deliveries,
+ 	 			param5: null  //$scope.statuses[0],
+ 	 		}
+ 	 		var config1 = {
+ 	 			params: params1
+ 	 		}
+ 	 		var params2 = {
+ 	 			param1: null, //$scope.params.startDate,
+ 	 			param2: null, //$scope.params.endDate,
+ 	 			param3: null, //$scope.params.product
+ 	 			param4: null, //$scope.deliveries,
+ 	 			param5: null  //$scope.statuses[1]
+ 	 		}
+ 	 		var config2 = {
+ 	 			params: params2
+ 	 		}
+ 	 		var params = {
+ 	 			param1: null, //$scope.params.startDate,
+ 	 			param2: null, //$scope.params.endDate,
+ 	 			param3: null, //$scope.params.product,
+ 				param4: null, //$scope.deliveries,
+ 	 		};
+ 	 		var config = {
+ 	 			params: params
+ 	 		};
+
+ 	 		if ($scope.distributedparams.deliverySelected === 'ViaPost'){
+	  			DistributedModel.getDistributedStatuses(config1, config2)
+	  				.then(function(result){
+	  					console.log(result);
+	  					var cumulativeTotal = 0,
+	  					dailyTotal = 0,
+					 		graphDataArray = [];
+	  					parseGraphData(result, graphDataArray, dailyTotal, cumulativeTotal);
+	  			})
+ 	 		} else {
+ 	 			DistributedModel.getDistributed(config)
+ 	 				.then(function(result){
+ 	 					console.log(result);
+	  					var cumulativeTotal = 0,
+	  					dailyTotal = 0,
+					 		graphDataArray = [];
+ 	 					parseGraphData(result, graphDataArray, dailyTotal, cumulativeTotal);
+ 				})
+ 	 		}
+ 		};             
+	}, true);
+
+	$scope.$watch('params', function(newValue, oldValue) {
+      	if (newValue){
+      		$scope.graph = [];
+	 		var dailyTotal = 0,
 			cumulativeTotal = 0,
 	 		graphDataArray = [];
  	 		// var params1 = {
@@ -126,12 +192,15 @@ angular.module('dashApp')
  	 			DistributedModel.getDistributed(config)
  	 				.then(function(result){
  	 					console.log(result);
- 	 					parseGraphData(result);
+	  					var cumulativeTotal = 0,
+	  					dailyTotal = 0,
+					 		graphDataArray = [];
+ 	 					parseGraphData(result, graphDataArray, dailyTotal, cumulativeTotal);
  	 				})
  		};             
 	}, true);
 	
-	function parseGraphData(data){
+	function parseGraphData(data, graphDataArray, dailyTotal, cumulativeTotal){
 		if (data.length !== 2){
 			data = [data];
 			console.log(data);

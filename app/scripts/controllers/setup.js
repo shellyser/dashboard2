@@ -22,9 +22,6 @@ angular.module('dashApp')
 			$scope.deviceSelected.splice($scope.deviceSelected.indexOf(deviceType), 1);
 		}
  		$scope.graph = [];
- 		dailyTotal = 0,
-		cumulativeTotal = 0,
- 		graphDataArray = [];
 		var params1 = {
 			param1: null, //$scope.params.startDate,
 			param2: null, //$scope.params.endDate,
@@ -56,14 +53,20 @@ angular.module('dashApp')
 				SetupModel.getSetupsModlets(config1)
 					.then(function(result){
 						console.log(result);
-						parseGraphData(result);
+				 		var dailyTotal = 0,
+						cumulativeTotal = 0,
+				 		graphDataArray = [];
+						parseGraphData(result, graphDataArray, dailyTotal, cumulativeTotal);
 						$scope.noData = false;
 				})
 			} else {
 				SetupModel.getSetupsThermostats(config2)
 					.then(function(result){
 						console.log(result);
-						parseGraphData(result);
+				 		var dailyTotal = 0,
+						cumulativeTotal = 0,
+				 		graphDataArray = [];
+						parseGraphData(result, graphDataArray, dailyTotal, cumulativeTotal);
 						$scope.noData = false;
 				})
 			}
@@ -72,7 +75,10 @@ angular.module('dashApp')
 			SetupModel.getSetupsDevices(config1, config2)
 				.then(function(result){
 					console.log(result);
-					parseGraphData(result);
+			 		var dailyTotal = 0,
+					cumulativeTotal = 0,
+			 		graphDataArray = [];
+					parseGraphData(result, graphDataArray, dailyTotal, cumulativeTotal);
 			})
 		} 
 		else {
@@ -94,9 +100,6 @@ angular.module('dashApp')
      $scope.$watch('params', function(newValue, oldValue) {
      	if (newValue){
      		$scope.graph = [];
-	 		dailyTotal = 0,
-			cumulativeTotal = 0,
-	 		graphDataArray = [];
 	 		var params1 = {
 	 			param1: null, //$scope.params.startDate,
 	 			param2: null, //$scope.params.endDate,
@@ -128,14 +131,20 @@ angular.module('dashApp')
 		 		SetupModel.getSetupsDevices(config1, config2)
 		 			.then(function(result){
 		 				console.log(result);
-		 				parseGraphData(result);
+ 				 		var dailyTotal = 0,
+ 						cumulativeTotal = 0,
+ 				 		graphDataArray = [];
+		 				parseGraphData(result, graphDataArray, dailyTotal, cumulativeTotal);
 		 			})
 	 		} else {
 	 			
 	 			SetupModel.getSetups(config)
 	 				.then(function(result){
 	 					console.log(result);
-	 					parseGraphData(result);
+				 		var dailyTotal = 0,
+						cumulativeTotal = 0,
+				 		graphDataArray = [];
+	 					parseGraphData(result, graphDataArray, dailyTotal, cumulativeTotal);
 	 				})
 		 	}
 		};
@@ -143,7 +152,7 @@ angular.module('dashApp')
 
 	
 	
-	function parseGraphData(data){
+	function parseGraphData(data, graphDataArray, dailyTotal, cumulativeTotal){
 		if (data.length !== 2){
 			data = [data];
 			console.log(data);

@@ -1,10 +1,15 @@
-
-
 angular.module('dashApp')
 .controller('SignupCtrl',  function ($scope, SignupModel) {
     
     // var $scope = this;
     $scope.count = { total: 0 };
+    $scope.noData = false;
+    $scope.displayData = function(){
+    	if ($scope.noData){
+    		$scope.count = {total: '—'}
+    	}
+    	return $scope.noData;
+    };
 
 	$scope.$watch('params', function(newValue, oldValue) {
         if (newValue){
@@ -20,11 +25,13 @@ angular.module('dashApp')
             SignupModel.getSignups(config)
             	.then(function(result){
             		parseGraphData(result);
+            		parseMapData(result);
             	})
         }
     }, true);
 	
 	function parseGraphData(data){
+
 		var params = $scope.params,
 			dates = [],
 			labels = [],
@@ -84,8 +91,12 @@ angular.module('dashApp')
 			graphData.datasets.push(dataPointsCumulative);
 			$scope.count = { total: cumCounter};	
 		}
-
-		$scope.graph = graphData;
+		if (graphData === undefined){
+			$scope.noData = true;
+		}
+		else {
+			$scope.graph = graphData;
+		}
 	}
 
 	function parseMapData(data){

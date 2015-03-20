@@ -41,7 +41,7 @@ angular.module('dashApp')
 	      			mapProducts = [],
 	      			productsCounter = 0,
 	      			concurrent;
-      			mapData[moduleName] = {};
+      				mapData[moduleName] = {};
       			//   loop over list of every communicationType to be included
       			for ( var i in params.communication) {
       				//product exists for the current module

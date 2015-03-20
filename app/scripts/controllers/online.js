@@ -1,5 +1,4 @@
 
-
 angular.module('dashApp')
 .controller('OnlineCtrl',  function ($scope, Enrollmentdata) {
     var onlineModule = 'online';
@@ -8,12 +7,19 @@ angular.module('dashApp')
     $scope.onlineparams = {};
     $scope.onlineparams.deviceChosen = $scope.devices[0];
     $scope.noData = false;
+    $scope.displayData = function(){
+    	if ($scope.noData){
+    		$scope.count = {total: '—'}
+    	}
+    	return $scope.noData;
+    };
 
      $scope.$watch('params', function(newValue, oldValue) {
              if (newValue){
                  $scope.drawGraph = function (){
              		Enrollmentdata[onlineModule]({"startDate": null, "endDate": null, "product": null}).$promise.then(function (result) {
              	    	parseGraphData(result);	
+             	    	parseMapData(result);
              		})
                  }();
              }
@@ -25,13 +31,14 @@ angular.module('dashApp')
              		Enrollmentdata[onlineModule]({"device": null}).$promise.then(function (result) {
              	    	if ($scope.params.commTypeSelected.length > 0){
              	    		parseGraphData(result);
+             	    		parseMapData(result);
              	    		$scope.noData = false;
              	    	}
              	    	else{
              	    		$scope.noData = true;
              	    	}	
              		})
-                 }();
+				}();
              }
      }, true);
 	
@@ -127,16 +134,51 @@ angular.module('dashApp')
 					$scope.count = { total: cumulativeCounter};	
 				}
 				$scope.graph = graphData;
-				$scope.noData = false;
+			}
+			else{
+				$scope.noData = true;
 			}
 		}
 	}
 
-	//no data for this module -- don't draw a graph.
-	// function noData(){
-	// 	elt.parent().hide();
-	// 	showGraphArea(false);
-	// 	elt.closest('.module-body').find('.module-body-stat').text('\u2014');
-	// 	elt.closest('.module-body').prev().find('.module-stat').text('\u2014');
-	// }
+	function parseMapData(data){
+		var params = $scope.params,
+			mapData = {},
+			markers = [],
+			points = [],
+			devices = [],
+			deviceData = [],
+			cumulativeTotal = 0,
+			tempMapData = {},
+			selectedYear = $scope.year;
+
+		tempMapData = data.years[selectedYear].data.MappingData;
+		
+		for (var key in tempMapData) {
+			devices.push(key);
+			deviceData.push(tempMapData[key].data);
+			cumulativeTotal += tempMapData[key].cumulativeTotal;
+		} 
+
+		for (var dataset in deviceData){
+			if (dataset === "0" ){
+				markers = Object.keys(deviceData[dataset]);
+				for (var key in deviceData[dataset]){
+					points.push(deviceData[dataset][key]);
+				}
+			}else{
+				var i = 0;
+				for(var key in deviceData[dataset]){
+					points[i].value += deviceData[dataset][key].value;
+					points[i].cumulativeTotal += deviceData[dataset][key].cumulativeTotal;
+					i++;
+				}
+			}
+		} 
+		mapData = {
+			'markers': markers,
+		 	'points': points
+		}
+		$scope.map = mapData;
+	}
 });
